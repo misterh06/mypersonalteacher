@@ -34,6 +34,9 @@ import { collection, getDocs } from "firebase/firestore";
 export default function Home() {
   const [userProfile, setUserProfile] = useState<{ nom: string; prenom: string } | null>(null);
   const [noteEx01, setNoteEx01] = useState<number>(0);
+  const [totalAnglais, setTotalAnglais] = useState<number>(0);
+  const [totalFrancais, setTotalFrancais] = useState<number>(0);
+  const [totalMaths, setTotalMaths] = useState<number>(0);
   const [eleves, setEleves] = useState<{
     anglais: Array<{
       nom: string;
@@ -101,24 +104,18 @@ export default function Home() {
 
         // Calcul des points par matière
         for (const [key, value] of Object.entries(data)) {
-          if (key.startsWith("note_") && typeof value === "number") {
-            // Log pour déboguer
-            console.log(`Clé: ${key}, Valeur: ${value}`);
+          if (key === "notes" && typeof value === "object") {
+            // Points d'anglais (somme de tous les sous-points)
+            const anglaisNotes = value.anglais || {};
+            pointsAnglais = (anglaisNotes.exercices || 0) + 
+                          (anglaisNotes.jeux?.translate || 0) + 
+                          (anglaisNotes.jeux?.orderwords || 0) +
+                          (anglaisNotes.jeux?.irregular_verbs || 0) +
+                          (anglaisNotes.jeux?.quiz || 0);
             
-            // Calcul spécifique pour l'anglais
-            if (key === "note_ex01" ||
-              key === "note_chat" || 
-                key === "note_orderWords" || 
-                key === "note_quiz01" || 
-                key === "note_translate" || 
-                key === "note_verbs") {
-              pointsAnglais += value;
-              console.log(`Points anglais ajoutés pour ${data.prenom} (${key}): ${value}`);
-            } else if (key.toLowerCase().includes("francais")) {
-              pointsFrancais += value;
-            } else if (key.toLowerCase().includes("maths")) {
-              pointsMaths += value;
-            }
+            pointsFrancais = value.francais || 0;
+            pointsMaths = value.maths || 0;
+            break;
           }
         }
 
@@ -179,18 +176,31 @@ export default function Home() {
           const docData = docSnap.data();
   
           let total = 0;
-          for (const [key, value] of Object.entries(docData)) {
-            if (key.startsWith("note_") && typeof value === "number") {
-              total += value;
-            }
+          if (docData.notes) {
+            // Calcul du total des points d'anglais
+            const anglaisNotes = docData.notes.anglais || {};
+            const pointsAnglais = (anglaisNotes.exercices || 0) + 
+                                (anglaisNotes.jeux?.translate || 0) + 
+                                (anglaisNotes.jeux?.orderwords || 0) +
+                                (anglaisNotes.jeux?.irregular_verbs || 0) +
+                                (anglaisNotes.jeux?.quiz || 0);
+            
+            // Calcul des totaux par matière
+            setTotalAnglais(pointsAnglais);
+            setTotalFrancais(docData.notes.francais || 0);
+            setTotalMaths(docData.notes.maths || 0);
+            
+            // Calcul du total général
+            const totalGeneral = pointsAnglais + 
+                               (docData.notes.francais || 0) + 
+                               (docData.notes.maths || 0);
+            setNoteEx01(totalGeneral);
           }
   
-          setNoteEx01(total);
-           // ✅ Nom + prénom
-  setUserProfile({
-    nom: docData.nom || "",
-    prenom: docData.prenom || "",
-  });
+          setUserProfile({
+            nom: docData.nom || "",
+            prenom: docData.prenom || "",
+          });
         }
       }
     });
@@ -247,11 +257,23 @@ export default function Home() {
                />
              ))}
              <div className="flex items-center ml-3">
-            {/* Nombre de points */}
-            <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded shadow">
-    {noteEx01} pts
-  </div>
-  </div>
+              {/* Total général */}
+              <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded shadow mr-4">
+                {noteEx01} pts
+              </div>
+              {/* Totaux par matière */}
+              <div className="flex space-x-2">
+                <div className="bg-purple-100 text-purple-800 px-2 py-1 rounded shadow">
+                  {totalAnglais} pts
+                </div>
+                <div className="bg-green-100 text-green-800 px-2 py-1 rounded shadow">
+                  {totalFrancais} pts
+                </div>
+                <div className="bg-blue-100 text-blue-800 px-2 py-1 rounded shadow">
+                  {totalMaths} pts
+                </div>
+              </div>
+            </div>
            </div>  
           </div>
           <nav className="space-x-4">

@@ -6,19 +6,27 @@ interface JXGElement extends JXG.GeometryElement {
   elType: string;
   X?: ((t?: number, suspendUpdate?: boolean) => number) | (() => number);
   Y?: ((t?: number, suspendUpdate?: boolean) => number) | (() => number);
-  id?: string;
-  parents?: string[];
+  id: string;
+  parents: string[];
   Value?: ((t?: number) => number) | (() => number);
 }
+
+type GeometryElement = JXGElement | JXG.Segment | JXG.Circle | JXG.Line | JXG.Angle;
+
+const getPointCoordinates = (point: JXGElement): { x: number; y: number } => {
+  const x = typeof point.X === 'function' ? point.X() : 0;
+  const y = typeof point.Y === 'function' ? point.Y() : 0;
+  return { x, y };
+};
 
 export default function GeometryBoard() {
   const boardRef = useRef<JXG.Board | null>(null);
   const [board, setBoard] = useState<JXG.Board | null>(null);
   const [points, setPoints] = useState<JXGElement[]>([]);
-  const [segments, setSegments] = useState<JXGElement[]>([]);
-  const [angles, setAngles] = useState<JXGElement[]>([]);
-  const [measurements, setMeasurements] = useState<JXGElement[]>([]);
-  const [protractor, setProtractor] = useState<JXGElement | null>(null);
+  const [segments, setSegments] = useState<GeometryElement[]>([]);
+  const [angles, setAngles] = useState<GeometryElement[]>([]);
+  const [measurements, setMeasurements] = useState<GeometryElement[]>([]);
+  const [protractor, setProtractor] = useState<GeometryElement | null>(null);
   const [geometryFeedback, setGeometryFeedback] = useState<string>("");
   const [currentTool, setCurrentTool] = useState<string>("move");
   const [showProtractor, setShowProtractor] = useState<boolean>(false);
@@ -34,9 +42,19 @@ export default function GeometryBoard() {
       grid: true,
       showNavigation: true,
       showCopyright: false,
+      zoom: {
+        min: 0.5,
+        max: 3,
+        factorX: 1.2,
+        factorY: 1.2
+      },
+      pan: {
+        enabled: true,
+        needTwoFingers: false
+      },
       unitX: 50, // 50 pixels = 1 cm
       unitY: 50  // 50 pixels = 1 cm
-    } as JXG.BoardAttributes);
+    } as unknown as JXG.BoardAttributes);
     boardRef.current = b;
     setBoard(b);
 
@@ -107,8 +125,12 @@ export default function GeometryBoard() {
     const circle = board.create('circle', [point1, length], { visible: false });
     
     // Créer un point libre sur le cercle
-    const point2 = board.create('glider', [point1.X() + length, point1.Y(), circle], {
-      name: String.fromCharCode(66 + points.length), // B, C, D...
+    const point2 = board.create('glider', [
+      getPointCoordinates(point1).x + length,
+      getPointCoordinates(point1).y,
+      circle
+    ], {
+      name: String.fromCharCode(66 + points.length),
       size: 3,
       color: 'blue'
     });
@@ -121,8 +143,8 @@ export default function GeometryBoard() {
 
     // Afficher la mesure
     const measure = board.create('text', [
-      (point1.X() + point2.X()) / 2 + 0.5,
-      (point1.Y() + point2.Y()) / 2 + 0.5,
+      (getPointCoordinates(point1).x + getPointCoordinates(point2).x) / 2 + 0.5,
+      (getPointCoordinates(point1).y + getPointCoordinates(point2).y) / 2 + 0.5,
       () => `${length.toFixed(1)} cm`
     ], {
       fontSize: 12
@@ -144,8 +166,8 @@ export default function GeometryBoard() {
 
     // Créer les autres points du carré
     const p3 = board.create('point', [
-      () => p2.X() - (p2.Y() - p1.Y()),
-      () => p2.Y() + (p2.X() - p1.X())
+      () => getPointCoordinates(p2 as JXGElement).x - (getPointCoordinates(p2 as JXGElement).y - getPointCoordinates(p1 as JXGElement).y),
+      () => getPointCoordinates(p2 as JXGElement).y + (getPointCoordinates(p2 as JXGElement).x - getPointCoordinates(p1 as JXGElement).x)
     ], { name: String.fromCharCode(66 + points.length + 1), size: 3, color: 'blue' });
 
     const p4 = board.create('point', [
@@ -301,8 +323,7 @@ export default function GeometryBoard() {
       const x = coords[0];
       const y = coords[1];
 
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      const pointName = points.length < alphabet.length ? alphabet[points.length] : `P${points.length + 1}`;
+      const pointName = String.fromCharCode(65 + points.length);
 
       if (currentTool === "point") {
         const newPoint = board.create("point", [x, y], {
@@ -311,49 +332,73 @@ export default function GeometryBoard() {
           color: "blue",
           fixed: false,
         }) as JXGElement;
-
-        setPoints(prev => [...prev, newPoint]);
-        setSelectedPoints([]);
-        setInstructions("Point créé");
-      } 
-      else if (currentTool === "segment") {
+        setPoints((prev) => [...prev, newPoint]);
+      } else if (currentTool === "segment") {
         const newPoint = board.create("point", [x, y], {
           name: pointName,
           size: 3,
           color: "blue",
           fixed: false,
         }) as JXGElement;
+        setPoints((prev) => [...prev, newPoint]);
 
-        setPoints(prev => [...prev, newPoint]);
-        
         if (selectedPoints.length === 1) {
           const segment = board.create("segment", [selectedPoints[0], newPoint], {
-            strokeColor: "black",
-            strokeWidth: 2
+            strokeColor: "teal",
+            strokeWidth: 2,
           });
-
-          // Ajouter la mesure de longueur
-          const measure = board.create('text', [
-            () => (selectedPoints[0].X() + newPoint.X()) / 2 + 0.5,
-            () => (selectedPoints[0].Y() + newPoint.Y()) / 2 + 0.5,
-            () => {
-              const dx = selectedPoints[0].X() - newPoint.X();
-              const dy = selectedPoints[0].Y() - newPoint.Y();
-              const length = Math.sqrt(dx * dx + dy * dy);
-              return `${length.toFixed(1)} cm`;
-            }
-          ]);
-
-          setSegments(prev => [...prev, segment]);
-          setMeasurements(prev => [...prev, measure]);
+          setSegments((prev) => [...prev, segment]);
           setSelectedPoints([]);
-          setInstructions("Segment créé avec mesure");
+          setInstructions("Segment créé");
         } else {
           setSelectedPoints([newPoint]);
-          setInstructions("Sélectionnez le deuxième point du segment");
+          setInstructions("Sélectionnez un deuxième point pour tracer le segment");
         }
-      }
-      else if (currentTool === "square") {
+      } else if (currentTool === "circle") {
+        const newPoint = board.create("point", [x, y], {
+          name: pointName,
+          size: 3,
+          color: "blue",
+          fixed: false,
+        }) as JXGElement;
+        setPoints((prev) => [...prev, newPoint]);
+
+        if (selectedPoints.length === 1) {
+          const circle = board.create("circle", [selectedPoints[0], newPoint], {
+            strokeColor: "purple",
+            strokeWidth: 2,
+          });
+          setSegments((prev) => [...prev, circle]);
+          setSelectedPoints([]);
+          setInstructions("Cercle créé");
+        } else {
+          setSelectedPoints([newPoint]);
+          setInstructions("Sélectionnez un point sur le rayon");
+        }
+      } else if (currentTool === "line") {
+        const newPoint = board.create("point", [x, y], {
+          name: pointName,
+          size: 3,
+          color: "blue",
+          fixed: false,
+        }) as JXGElement;
+        setPoints((prev) => [...prev, newPoint]);
+
+        if (selectedPoints.length === 1) {
+          const line = board.create("line", [selectedPoints[0], newPoint], {
+            straightFirst: true,
+            straightLast: true,
+            strokeColor: "teal",
+            strokeWidth: 2,
+          });
+          setSegments((prev) => [...prev, line]);
+          setSelectedPoints([]);
+          setInstructions("Droite créée");
+        } else {
+          setSelectedPoints([newPoint]);
+          setInstructions("Sélectionnez un deuxième point pour tracer la droite");
+        }
+      } else if (currentTool === "square") {
         if (!isCreatingShape) {
           const newPoint = board.create("point", [x, y], {
             name: pointName,
@@ -375,8 +420,7 @@ export default function GeometryBoard() {
           setIsCreatingShape(false);
           setInstructions("Carré créé");
         }
-      }
-      else if (currentTool === "isosceles") {
+      } else if (currentTool === "isosceles") {
         if (!isCreatingShape) {
           const newPoint = board.create("point", [x, y], {
             name: pointName,
@@ -398,8 +442,7 @@ export default function GeometryBoard() {
           setIsCreatingShape(false);
           setInstructions("Triangle isocèle créé");
         }
-      }
-      else if (currentTool === "angle") {
+      } else if (currentTool === "angle") {
         const newPoint = board.create("point", [x, y], {
           name: pointName,
           size: 3,
@@ -619,145 +662,186 @@ export default function GeometryBoard() {
 
   return (
     <div className="flex flex-col items-center">
-      <div 
-        id="jxgboard" 
-        className="w-full h-96 border border-gray-300 cursor-crosshair"
-        style={{ touchAction: "none" }}
-      />
-
-      {/* Instructions en temps réel */}
-      <div className="mt-4 p-4 bg-blue-50 rounded-lg max-w-2xl text-center">
-        <p className="text-lg font-semibold">
-          {instructions || "Sélectionnez un outil pour commencer"}
-        </p>
-      </div>
-
-      {/* Panneau de contrôle principal */}
-      <div className="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-8">
-        <button
-          onClick={() => {
-            setCurrentTool("move");
-            setInstructions("Cliquez et déplacez les points pour modifier la figure");
-          }}
-          className={`flex flex-col items-center gap-1 ${
-            currentTool === "move" ? "bg-gray-600" : "bg-gray-500"
-          } hover:bg-gray-600 text-white py-1 px-2 rounded shadow-lg`}
-        >
-          <span className="text-base">✋</span>
-          <span className="text-sm">Déplacer</span>
-        </button>
+      <div className="mb-4 flex flex-wrap gap-2 justify-center">
         <button
           onClick={() => {
             setCurrentTool("point");
             setInstructions("Cliquez pour placer un point");
           }}
+          title="Placer un point"
           className={`flex flex-col items-center gap-1 ${
             currentTool === "point" ? "bg-blue-600" : "bg-blue-500"
           } hover:bg-blue-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">📍</span>
+          <span className="text-base">•</span>
           <span className="text-sm">Point</span>
         </button>
+
         <button
           onClick={() => {
             setCurrentTool("segment");
             setInstructions("Cliquez pour placer le premier point du segment");
           }}
+          title="Créer un segment"
           className={`flex flex-col items-center gap-1 ${
             currentTool === "segment" ? "bg-green-600" : "bg-green-500"
           } hover:bg-green-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">📏</span>
+          <span className="text-base">•</span>
           <span className="text-sm">Segment</span>
         </button>
+
+        <button
+          onClick={() => {
+            setCurrentTool("circle");
+            setInstructions("Cliquez pour placer le centre du cercle");
+          }}
+          title="Créer un cercle"
+          className={`flex flex-col items-center gap-1 ${
+            currentTool === "circle" ? "bg-purple-600" : "bg-purple-500"
+          } hover:bg-purple-600 text-white py-1 px-2 rounded shadow-lg`}
+        >
+          <span className="text-base">•</span>
+          <span className="text-sm">Cercle</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setCurrentTool("line");
+            setInstructions("Cliquez pour placer le premier point de la droite");
+          }}
+          title="Créer une droite"
+          className={`flex flex-col items-center gap-1 ${
+            currentTool === "line" ? "bg-teal-600" : "bg-teal-500"
+          } hover:bg-teal-600 text-white py-1 px-2 rounded shadow-lg`}
+        >
+          <span className="text-base">•</span>
+          <span className="text-sm">Droite</span>
+        </button>
+
         <button
           onClick={() => {
             setCurrentTool("square");
-            setInstructions("Cliquez pour placer le premier sommet du carré");
+            setInstructions("Cliquez pour placer le premier point du carré");
           }}
+          title="Créer un carré"
           className={`flex flex-col items-center gap-1 ${
-            currentTool === "square" ? "bg-purple-600" : "bg-purple-500"
-          } hover:bg-purple-600 text-white py-1 px-2 rounded shadow-lg`}
+            currentTool === "square" ? "bg-yellow-600" : "bg-yellow-500"
+          } hover:bg-yellow-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">⬛</span>
+          <span className="text-base">•</span>
           <span className="text-sm">Carré</span>
         </button>
+
         <button
           onClick={() => {
             setCurrentTool("isosceles");
-            setInstructions("Cliquez pour placer le sommet principal du triangle isocèle");
+            setInstructions("Cliquez pour placer le premier point du triangle isocèle");
           }}
+          title="Créer un triangle isocèle"
           className={`flex flex-col items-center gap-1 ${
-            currentTool === "isosceles" ? "bg-yellow-600" : "bg-yellow-500"
-          } hover:bg-yellow-600 text-white py-1 px-2 rounded shadow-lg`}
+            currentTool === "isosceles" ? "bg-pink-600" : "bg-pink-500"
+          } hover:bg-pink-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">△</span>
-          <span className="text-sm">Triangle Isocèle</span>
+          <span className="text-base">•</span>
+          <span className="text-sm">Triangle isocèle</span>
         </button>
+
         <button
           onClick={() => {
             setCurrentTool("angle");
-            setInstructions("Placez trois points pour créer un angle");
+            setInstructions("Cliquez pour placer le premier point de l'angle");
           }}
+          title="Créer un angle"
           className={`flex flex-col items-center gap-1 ${
             currentTool === "angle" ? "bg-orange-600" : "bg-orange-500"
           } hover:bg-orange-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">📐</span>
+          <span className="text-base">•</span>
           <span className="text-sm">Angle</span>
         </button>
+
         <button
           onClick={() => {
             setCurrentTool("eraser");
-            setInstructions("Cliquez sur un élément pour l'effacer");
+            setInstructions("Cliquez pour effacer un élément");
           }}
+          title="Effacer"
           className={`flex flex-col items-center gap-1 ${
             currentTool === "eraser" ? "bg-red-600" : "bg-red-500"
           } hover:bg-red-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">🧹</span>
-          <span className="text-sm">Gomme</span>
+          <span className="text-base">•</span>
+          <span className="text-sm">Effacer</span>
         </button>
+
         <button
-          onClick={createProtractor}
+          onClick={() => {
+            setCurrentTool("protractor");
+            setInstructions("Cliquez pour créer un rapporteur");
+          }}
+          title="Rapporteur"
           className={`flex flex-col items-center gap-1 ${
-            showProtractor ? "bg-indigo-600" : "bg-indigo-500"
-          } hover:bg-indigo-600 text-white py-1 px-2 rounded shadow-lg`}
+            currentTool === "protractor" ? "bg-gray-600" : "bg-gray-500"
+          } hover:bg-gray-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">📏</span>
+          <span className="text-base">•</span>
           <span className="text-sm">Rapporteur</span>
         </button>
+
         <button
-          onClick={handleSubmitGeometry}
-          className="flex flex-col items-center gap-1 bg-teal-500 hover:bg-teal-600 text-white py-1 px-2 rounded shadow-lg"
+          onClick={() => {
+            setCurrentTool("measure");
+            setInstructions("Cliquez pour mesurer un angle");
+          }}
+          title="Mesurer un angle"
+          className={`flex flex-col items-center gap-1 ${
+            currentTool === "measure" ? "bg-blue-600" : "bg-blue-500"
+          } hover:bg-blue-600 text-white py-1 px-2 rounded shadow-lg`}
         >
-          <span className="text-base">✓</span>
-          <span className="text-sm">Vérifier</span>
+          <span className="text-base">•</span>
+          <span className="text-sm">Mesurer un angle</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setCurrentTool("reference");
+            setInstructions("Cliquez pour créer un angle de référence");
+          }}
+          title="Angle de référence"
+          className={`flex flex-col items-center gap-1 ${
+            currentTool === "reference" ? "bg-green-600" : "bg-green-500"
+          } hover:bg-green-600 text-white py-1 px-2 rounded shadow-lg`}
+        >
+          <span className="text-base">•</span>
+          <span className="text-sm">Angle de référence</span>
+        </button>
+
+        <button
+          onClick={() => {
+            setCurrentTool("submit");
+            setInstructions("Cliquez pour soumettre les données");
+          }}
+          title="Soumettre les données"
+          className={`flex flex-col items-center gap-1 ${
+            currentTool === "submit" ? "bg-indigo-600" : "bg-indigo-500"
+          } hover:bg-indigo-600 text-white py-1 px-2 rounded shadow-lg`}
+        >
+          <span className="text-base">•</span>
+          <span className="text-sm">Soumettre</span>
         </button>
       </div>
 
-      {/* Instructions détaillées */}
-      <div className="mt-4 p-4 bg-blue-50 rounded-lg max-w-2xl">
-        <h3 className="text-lg font-bold mb-2">Comment utiliser les outils :</h3>
-        <ol className="list-decimal list-inside space-y-2">
-          <li>Déplacer : Cliquez et faites glisser les points pour modifier la figure</li>
-          <li>Point : Cliquez pour placer un point sur le plan</li>
-          <li>Segment : Cliquez deux points pour créer un segment mesuré</li>
-          <li>Carré : Cliquez pour le premier sommet, puis pour définir la longueur du côté</li>
-          <li>Triangle Isocèle : Cliquez pour le sommet principal, puis pour définir la longueur des côtés égaux</li>
-          <li>Angle : Placez trois points pour créer et mesurer un angle</li>
-          <li>Rapporteur : Placez deux points pour créer un rapporteur</li>
-          <li>Gomme : Cliquez sur un élément pour l'effacer</li>
-        </ol>
+      <div className="mt-4">
+        {instructions}
       </div>
 
-      {/* Affichage du feedback */}
-      {geometryFeedback && (
-        <div className="mt-4 p-4 border rounded bg-white/90 max-w-2xl">
-          <h3 className="text-lg font-bold mb-2">Analyse de votre construction :</h3>
-          <div className="whitespace-pre-line">{geometryFeedback}</div>
-        </div>
-      )}
+      <div className="mt-4">
+        {geometryFeedback}
+      </div>
+
+      {/* Ajout du conteneur pour le plan géométrique */}
+      <div id="jxgboard" className="w-full h-[500px] border border-gray-300 rounded-lg shadow-lg mt-4"></div>
     </div>
   );
 }

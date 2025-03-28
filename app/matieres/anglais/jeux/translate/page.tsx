@@ -11,7 +11,7 @@ import { Inter } from "next/font/google";
 import { Rowdies } from "next/font/google";
 import { auth, db } from "../../../../lib/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 
 const rowdies = Rowdies({ subsets: ["latin"], weight: "400" });
@@ -33,6 +33,8 @@ export default function TranslateGame() {
   const [themeError, setThemeError] = useState("");
   const [answered, setAnswered] = useState(false);
   const [noteTotal, setNoteTotal] = useState(0);
+  const [pointMessage, setPointMessage] = useState<string | null>(null);
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -40,13 +42,14 @@ export default function TranslateGame() {
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const docData = docSnap.data();
-          let total = 0;
-          for (const [key, value] of Object.entries(docData)) {
-            if (key.startsWith("note_") && typeof value === "number") {
-              total += value;
-            }
-          }
-          setNoteTotal(total);
+          // Calcul du total des points d'anglais
+          const anglaisNotes = docData.notes?.anglais || {};
+          const pointsAnglais = (anglaisNotes.exercices || 0) + 
+                              (anglaisNotes.jeux?.translate || 0) + 
+                              (anglaisNotes.jeux?.orderwords || 0) +
+                              (anglaisNotes.jeux?.irregular_verbs || 0) +
+                              (anglaisNotes.jeux?.quiz || 0);
+          setNoteTotal(pointsAnglais);
         }
       }
     });
@@ -88,35 +91,63 @@ export default function TranslateGame() {
   };
   
 
-  const handleSubmit = async () => {
+  const handleSubmitAnswer = async () => {
     if (!exercise || answered) return;
     setLoadingFeedback(true);
     try {
-      const response = await fetch("/api/chatbot_bis", {
+      const payload = {
+        mode: "checkTranslate",
+        game: exercise,
+        userAnswer,
+        userClass,
+      };
+      const res = await fetch("/api/chatbot", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          mode: "checktranslate",
-          direction, // ajout de la direction ici aussi
-          message: exercise,
-          userAnswer,
-          userClass,
-          userId: user?.uid,
-          exerciseId: "translate",
-        }),
+        body: JSON.stringify(payload),
       });
-      const data = await response.json();
-      if (data.note !== undefined && data.note > 0) {
-        setScore((prev) => prev + data.note);
-        setAnswered(true);
+      const data = await res.json();
+      if (data.error) {
+        setFeedback(`Erreur : ${data.error}`);
+      } else {
+        const isCorrect = /#BONNE_REPONSE#/i.test(data.response);
+        const cleanedFeedback = data.response.replace(/#BONNE_REPONSE#/i, "").trim();
+        setFeedback(cleanedFeedback);
+        
+        if (isCorrect) {
+          // Mise à jour des points dans Firestore
+          const userRef = doc(db, "users", user!.uid);
+          const userDoc = await getDoc(userRef);
+          
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const currentTranslatePoints = userData.notes?.anglais?.jeux?.translate || 0;
+            const currentTotalAnglais = (userData.notes?.anglais?.exercices || 0) + 
+                                      (userData.notes?.anglais?.jeux?.translate || 0) + 
+                                      (userData.notes?.anglais?.jeux?.orderwords || 0) +
+                                      (userData.notes?.anglais?.jeux?.irregular_verbs || 0) +
+                                      (userData.notes?.anglais?.jeux?.quiz || 0);
+            
+            // Mise à jour des points dans le sous-champ translate
+            await updateDoc(userRef, {
+              'notes.anglais.jeux.translate': currentTranslatePoints + 1,
+              'notes.anglais.total': currentTotalAnglais + 1
+            });
+            
+            // Mise à jour du score total affiché
+            setNoteTotal(prev => prev + 1);
+            
+            setPointMessage("✅ Point ajouté ! Total en anglais : " + (currentTotalAnglais + 1) + " points");
+            setTimeout(() => setPointMessage(null), 3000);
+          }
+        }
       }
-      setFeedback(data.feedback || data.response);
-      setAttempts((prev) => prev + 1);
     } catch (error) {
-      console.error("Erreur lors de la vérification de la réponse :", error);
-      setFeedback("Erreur lors de la vérification de la réponse.");
+      console.error("Erreur lors de la vérification du jeu", error);
+      setFeedback("Une erreur est survenue lors de la vérification du jeu.");
+    } finally {
+      setLoadingFeedback(false);
     }
-    setLoadingFeedback(false);
   };
   
   const content =
@@ -212,7 +243,7 @@ export default function TranslateGame() {
             {exercise && (
               <div className="flex items-center mt-6">
                 <button
-                  onClick={handleSubmit}
+                  onClick={handleSubmitAnswer}
                   className={`${inter.className} bg-green-400 text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-green-700 transition`}
                   disabled={loadingFeedback || answered}
                 >

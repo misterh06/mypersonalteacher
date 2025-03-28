@@ -3,7 +3,9 @@
 │ ├── 📁 api/
 │ │ ├── 📁 chatbot/
 │ │ │ ├── 📜 route.ts
-│ │ ├── 📁 chatbot2_bis
+│ │ ├── 📁 chatbot_bis
+│ │ │ ├── 📜 route.ts
+│ │ ├── 📁 checkGeometry
 │ │ │ ├── 📜 route.ts
 │ │ ├── 📁 matieres/
 │ │ │ ├── 📁 anglais/
@@ -41,19 +43,17 @@
 │ │ │ ├── 📁 3_anglais/
 │ │ │ │ ├── 📄 3_anglais.json
 │ │ │ │ ├── 📜 route.ts
-│
+│ │ ├── 📁 upload/
+│ │   ├──📜 route.ts
 │ ├── 📁 context/
 │ │ │ └──📜 UserContext.tsx
-│
 │ ├── 📁 hooks/
 │ │ │ └──📜 useUserData.ts
-│
 │ ├── 📁 lib/
 │ │   └──📜 firebaseConfig.ts
 │ │   └──📜 storeOrincrementScore.ts│
 │ ├── 📁 login/
 │ │   └──📜 page.tsx
-│
 │ ├── 📁 matieres/
 │ │ ├──📁 anglais/
 │ │ │ ├── 📁 cours_anglais/

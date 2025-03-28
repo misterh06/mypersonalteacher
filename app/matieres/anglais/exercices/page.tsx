@@ -6,7 +6,7 @@ import ReactMarkdown from "react-markdown";
 import { useUserData } from "../../../hooks/useUserData";
 import { useUser } from "../../../context/UserContext";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { auth, db } from "../../../lib/firebaseConfig";
 
 // Composant modal pour communiquer avec l'IA en mode "help"
@@ -128,10 +128,13 @@ export default function ExercicesAnglaisPage() {
         if (docSnap.exists()) {
           const docData = docSnap.data();
           let total = 0;
-          for (const [key, value] of Object.entries(docData)) {
-            if (key.startsWith("note_") && typeof value === "number") {
-              total += value;
-            }
+          if (docData.notes) {
+            // Calcul du total des points d'anglais
+            const anglaisNotes = docData.notes.anglais || {};
+            total = (anglaisNotes.exercices || 0) + 
+                   (anglaisNotes.translate || 0) + 
+                   (anglaisNotes.jeux?.orderwords || 0) +
+                   (anglaisNotes.jeux?.irregular_verbs || 0);
           }
           setNoteTotal(total);
         }
@@ -273,6 +276,29 @@ export default function ExercicesAnglaisPage() {
       } else {
         setFeedback(data.feedback);
         setNote(data.note);
+
+        // Mise à jour des points dans Firestore
+        if (data.note > 0) {
+          const userRef = doc(db, "users", user!.uid);
+          const userDoc = await getDoc(userRef);
+          
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            const currentPoints = userData.notes?.anglais?.exercices || 0;
+            
+            // Mise à jour des points dans le sous-champ exercices
+            await updateDoc(userRef, {
+              'notes.anglais.exercices': currentPoints + data.note,
+              totalPoints: (userData.totalPoints || 0) + data.note
+            });
+            
+            // Mise à jour du score total affiché
+            setNoteTotal(prev => prev + data.note);
+            
+            // Ajout d'un message de félicitations dans le feedback
+            setFeedback(prev => `${prev}\n\n🎉 Bravo ! Vous avez gagné ${data.note} points ! Total en anglais : ${currentPoints + data.note} points`);
+          }
+        }
       }
     } catch (error) {
       console.error("Erreur lors de la vérification de la réponse", error);

@@ -9,7 +9,7 @@ import { useUser } from "../../../../context/UserContext";
 import { Inter } from "next/font/google";
 import { auth, db } from "../../../../lib/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -109,7 +109,7 @@ export default function QuizPage() {
   const { user, loading: userLoading, userId } = useUser();
 
   // État pour le nombre de points
-  const [noteEx01, setNoteEx01] = useState(0);
+  const [noteTotal, setNoteTotal] = useState(0);
   const [userProfile, setUserProfile] = useState<{ nom: string; prenom: string } | null>(null);
 
   // Récupération des points et profil utilisateur depuis Firestore
@@ -121,12 +121,16 @@ export default function QuizPage() {
         if (docSnap.exists()) {
           const docData = docSnap.data();
           let total = 0;
-          for (const [key, value] of Object.entries(docData)) {
-            if (key.startsWith("note_") && typeof value === "number") {
-              total += value;
-            }
+          if (docData.notes) {
+            // Calcul du total des points d'anglais
+            const anglaisNotes = docData.notes.anglais || {};
+            total = (anglaisNotes.exercices || 0) + 
+                   (anglaisNotes.translate || 0) + 
+                   (anglaisNotes.jeux?.orderwords || 0) +
+                   (anglaisNotes.jeux?.irregular_verbs || 0) +
+                   (anglaisNotes.jeux?.quiz || 0);
           }
-          setNoteEx01(total);
+          setNoteTotal(total);
           setUserProfile({
             nom: docData.nom || "",
             prenom: docData.prenom || "",
@@ -243,6 +247,29 @@ export default function QuizPage() {
         setFeedback(data.response);
         if (data.note !== undefined && data.note !== null) {
           setFeedback(prev => `Note obtenue : ${data.note}/3\n\n${prev}`);
+          
+          // Mise à jour des points dans Firestore
+          if (user?.uid) {
+            const userRef = doc(db, "users", user.uid);
+            const userDoc = await getDoc(userRef);
+            
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              const currentPoints = userData.notes?.anglais?.jeux?.quiz || 0;
+              
+              // Mise à jour des points dans le sous-champ quiz
+              await updateDoc(userRef, {
+                'notes.anglais.jeux.quiz': currentPoints + data.note,
+                totalPoints: (userData.totalPoints || 0) + data.note
+              });
+              
+              // Mise à jour du score total affiché
+              setNoteTotal(prev => prev + data.note);
+              
+              // Ajout d'un message de félicitations
+              setFeedback(prev => `${prev}\n\n🎉 Bravo ! Vous avez gagné ${data.note} points ! Total en quiz : ${currentPoints + data.note} points`);
+            }
+          }
         }
       }
     } catch (error) {
@@ -407,7 +434,7 @@ export default function QuizPage() {
         
         <div className="flex items-center space-x-4">
           <div className="bg-blue-200 text-blue-800 px-8 py-1 rounded shadow">
-            {noteEx01} pts
+            {noteTotal} pts
           </div>
           <Link
             href="/"

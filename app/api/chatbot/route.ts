@@ -67,7 +67,8 @@ Maintenant, voici la dernière question de ${prenom} : "${message}". Aide ${pren
         ? `Tu es un professeur d'anglais pédagogique exceptionnel, drôle et encourageant. Tu te souviens de la conversation précédente :
 ${conversationHistory}
 ${filePrompt}
-Maintenant, voici la dernière question de l'élève : "${message}". Donne-lui une réponse concise (pas plus de 30 mots) rédigée en français et anglais.`
+Maintenant, voici la dernière question de l'élève : "${message}".
+Donne-lui une réponse concise (pas plus de 30 mots) rédigée en français et anglais.`
         : `Tu es un professeur d'anglais pédagogique exceptionnel, drôle et encourageant. Voici la question de l'élève : "${message}".
 Réponds avec des emoji pour plus de gaité. ${filePrompt}`;
       const result = await model.generateContent(prompt);
@@ -212,7 +213,7 @@ Crée une phrase simple et courte en anglais sur ce thème, puis mélange les mo
 **Réponds en utilisant le format Markdown** avec une présentation claire :
 - un titre,
 - la phrase mélangée sous forme de liste ou dans un encadré,
-- la consigne pour l’élève,
+- la consigne pour l'élève,
 - un saut de ligne,
 Exemple de format attendu :
 **Phrase mélangée** : \`the - cat - on - sat - mat - the\`
@@ -241,6 +242,30 @@ Réponse de l'élève : "${userAnswer}"
 1. Analyse la réponse de l'élève.
 2. Si la réponse est exactement correcte, félicite-le chaleureusement.
 3. Sinon, indique la phrase correcte attendue et explique en français ce qui ne va pas (ordre, orthographe, mots manquants).
+4. Termine la réponse avec : "#BONNE_REPONSE#" **uniquement si la réponse est correcte**, sinon ne mets rien.
+    
+Réponds en français, de manière amicale et encourageante.
+Utilise le Markdown pour structurer la réponse (gras, titres, listes si besoin).
+`;
+      const result = await model.generateContent(prompt);
+      const text = result.response.text();
+    
+      return NextResponse.json({ response: text });
+    }
+
+    if (mode === "checkTranslate") {
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash-exp" });
+      const prompt = `
+Voici un exercice de traduction destiné à un élève de classe ${userClass}.
+    
+Phrase à traduire :
+${game}
+    
+Réponse de l'élève : "${userAnswer}"
+    
+1. Analyse la réponse de l'élève.
+2. Si la traduction est correcte (même sens, même niveau de langue), félicite-le chaleureusement.
+3. Sinon, indique la traduction correcte attendue et explique en français ce qui ne va pas (sens, vocabulaire, grammaire).
 4. Termine la réponse avec : "#BONNE_REPONSE#" **uniquement si la réponse est correcte**, sinon ne mets rien.
     
 Réponds en français, de manière amicale et encourageante.

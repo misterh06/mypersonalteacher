@@ -5,7 +5,14 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { useUserData } from "../../../hooks/useUserData";
 import { useUser } from "../../../context/UserContext";
-import GeometryBoard from "./GeometryBoard"; // Import du composant GeometryBoard
+import GeometryBoard from "./GeometryBoard";
+import { motion } from "framer-motion";
+import { Rowdies } from "next/font/google";
+import { auth, db } from "../../../lib/firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+
+const rowdies = Rowdies({ subsets: ["latin"], weight: "400" });
 
 // Composant de la calculatrice scientifique
 function CalculatorModal({ onClose }: { onClose: () => void }) {
@@ -194,6 +201,7 @@ export default function ExercicesPage() {
   const [feedback, setFeedback] = useState<string | null>(null);
   const [checkingAnswer, setCheckingAnswer] = useState<boolean>(false);
   const [showCalculator, setShowCalculator] = useState<boolean>(false);
+  const [noteTotal, setNoteTotal] = useState(0);
 
   // Chargement dynamique du programme selon la classe de l'élève
   useEffect(() => {
@@ -224,6 +232,27 @@ export default function ExercicesPage() {
     }
     fetchProgramme();
   }, [userClass]);
+
+  // Ajout de l'effet pour récupérer les points
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const docRef = doc(db, "users", user.uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const docData = docSnap.data();
+          let total = 0;
+          for (const [key, value] of Object.entries(docData)) {
+            if (key.startsWith("note_") && typeof value === "number") {
+              total += value;
+            }
+          }
+          setNoteTotal(total);
+        }
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   if (userLoading || userDataLoading) {
     return (
@@ -307,7 +336,7 @@ export default function ExercicesPage() {
 
   // Fonction pour soumettre la réponse
   const handleSubmitAnswer = async () => {
-    if (!generatedExercise) return;
+    if (!generatedExercise || !user) return;
     setCheckingAnswer(true);
     setIsAnswerSubmitted(true);
     setFeedback(null);
@@ -323,6 +352,30 @@ export default function ExercicesPage() {
       });
       const data = await res.json();
       setFeedback(data.feedback);
+
+      // Mise à jour des points dans Firestore
+      if (data.isCorrect) {
+        const points = data.points || 10; // Par défaut 10 points si non spécifié
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const currentPoints = userData.notes?.maths || 0;
+          
+          // Mise à jour des points dans le sous-champ maths
+          await updateDoc(userRef, {
+            'notes.maths': currentPoints + points,
+            totalPoints: (userData.totalPoints || 0) + points
+          });
+          
+          // Mise à jour du score total affiché
+          setNoteTotal(prev => prev + points);
+          
+          // Ajout d'un message de félicitations dans le feedback
+          setFeedback(prev => `${prev}\n\n🎉 Bravo ! Vous avez gagné ${points} points ! Total en mathématiques : ${currentPoints + points} points`);
+        }
+      }
     } catch (error) {
       console.error("Erreur lors de la vérification de la réponse", error);
       setFeedback("Une erreur est survenue lors de la vérification de la réponse.");
@@ -332,158 +385,212 @@ export default function ExercicesPage() {
   };
 
   return (
-    <div
-      className="
-        flex flex-col h-screen 
-        bg-[url('/math_exercices.png')]
-        bg-cover
-        bg-no-repeat
-        bg-fixed
-      "
-    >
-      
-      
+    <div className="flex flex-col min-h-screen bg-[url('/math_exercices.png')] bg-cover bg-no-repeat bg-fixed">
       {/* Header global */}
-      <header className="shadow bg-white">
-  <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-    {/* Colonne de gauche : titre */}
-    <div className="text-2xl font-bold">Exercices de Mathématiques</div>
-    
-    {/* Colonne centrale : icône de la calculatrice */}
-    
-    
-    {/* Colonne de droite : navigation */}
-    <nav className="space-x-4">
-      <Link href="/">Accueil</Link>
-      <a
-        href="#"
-        onClick={(e) => {
-          e.preventDefault();
-          window.history.back();
-        }}
-      >
-        Retour
-      </a>
-    </nav>
-  </div>
-</header>
-
-
-      {/* Contenu principal */}
-      <main className="flex-grow container mx-auto px-4 py-8">
-  <div className="flex flex-col md:flex-row">
-    {/* Colonne de gauche : Génération des exercices */}
-    <div className="md:w-2/3">
-      <h1 className="text-4xl font-bold mb-6">Générer des Exercices</h1>
-      {/* Sélection du domaine */}
-      <div className="mb-4">
-        <label className="block font-bold mb-2">Sélectionnez un domaine :</label>
-        <select
-          className="p-2 border rounded bg-[rgba(255,255,255,0.6)]"
-          value={selectedDomain}
-          onChange={(e) => {
-            setSelectedDomain(e.target.value);
-            setSelectedChapter("");
-            setGeneratedExercise(null);
-            setUserAnswer("");
-            setIsAnswerSubmitted(false);
-            setFeedback(null);
-          }}
-        >
-          <option value="">-- Choisissez un domaine --</option>
-          {domains.map((domain: Domain) => (
-            <option key={domain.name} value={domain.name}>
-              {domain.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      {/* Sélection du chapitre */}
-      {selectedDomain && (
-        <div className="mb-4">
-          <label className="block font-bold mb-2">Sélectionnez un chapitre :</label>
-          <select
-            className="p-2 border rounded bg-[rgba(255,255,255,0.6)]"
-            value={selectedChapter}
-            onChange={(e) => {
-              setSelectedChapter(e.target.value);
-              setGeneratedExercise(null);
-              setUserAnswer("");
-              setIsAnswerSubmitted(false);
-              setFeedback(null);
-            }}
-          >
-            <option value="">-- Choisissez un chapitre --</option>
-            {chapters.map((chap, index) => (
-              <option key={index} value={chap.titre}>
-                {chap.titre}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      {/* Bouton pour générer l'exercice */}
-      <button
-        onClick={handleGenerateExercise}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
-      >
-        {isLoading ? "Génération en cours..." : "Générer l'exercice"}
-      </button>
-      {/* Affichage de l'exercice généré */}
-      {generatedExercise && (
-        <div className="mt-6 p-4 border rounded bg-white/80">
-          <h2 className="text-2xl font-bold mb-2">Exercice généré</h2>
-          <ReactMarkdown>{generatedExercise}</ReactMarkdown>
-          {(generatedExercise.toLowerCase().includes("geometryboard") ||
-            generatedExercise.toLowerCase().includes("affichage interactif")) && (
-            <div className="mt-4">
-              <GeometryBoard />
+      <header className="fixed top-0 left-0 right-0 z-50 bg-gray-100/70 p-4 shadow-md backdrop-blur-sm">
+        <div className="container mx-auto px-4 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <Link href="/matieres/maths/exercices" className="font-['Arial'] bg-blue-100 rounded-full px-4 py-2 shadow hover:bg-blue-200 transition text-blue-600 font-bold">
+              Exercices
+            </Link>
+            <Link href="/matieres/maths/jeux" className="font-['Arial'] bg-white rounded-full px-4 py-2 shadow hover:bg-blue-100 transition text-blue-600 font-bold">
+              Jeux
+            </Link>
+            <Link href="/matieres/maths/exercices/quizz" className="font-['Arial'] bg-white rounded-full px-4 py-2 shadow hover:bg-blue-100 transition text-blue-600 font-bold">
+              Quiz
+            </Link>
+            <Link href="/matieres/maths/devoirs/mon_devoir" className="font-['Arial'] bg-white rounded-full px-4 py-2 shadow hover:bg-blue-100 transition text-blue-600 font-bold">
+              Mes Devoirs
+            </Link>
+          </div>
+          <div className="flex items-center space-x-4">
+            <div className="bg-blue-200 text-blue-800 px-8 py-1 rounded shadow">
+              {noteTotal} pts
             </div>
-          )}
-          {/* Zone de réponse */}
-          <div className="mt-4">
-            <label className="block font-bold mb-2">Votre réponse :</label>
-            <textarea
-              className="w-full p-2 border rounded h-40"
-              value={userAnswer}
-              onChange={(e) => setUserAnswer(e.target.value)}
-              disabled={isAnswerSubmitted}
-            />
-            <button
-              onClick={handleSubmitAnswer}
-              className="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
-              disabled={isAnswerSubmitted || checkingAnswer}
-            >
-              {checkingAnswer ? "Vérification en cours..." : "Soumettre"}
+            <button onClick={() => setShowCalculator(true)} className="p-2 hover:opacity-80">
+              <img src="/calculatrice.png" alt="Calculatrice" className="w-8 h-8" />
+            </button>
+            <Link href="/" className="font-['Arial'] text-blue-600 font-bold hover:text-blue-800 transition">
+              Accueil
+            </Link>
+            <button onClick={() => window.history.back()} className="font-['Arial'] text-blue-600 font-bold hover:text-blue-800 transition">
+              Retour
             </button>
           </div>
-          {/* Feedback */}
-          {feedback && (
-            <div className="mt-4 p-2 border rounded">
-              <ReactMarkdown>{feedback}</ReactMarkdown>
-            </div>
-          )}
         </div>
-      )}
-    </div>
+      </header>
 
-    {/* Colonne de droite : Zone des outils */}
-    <div className="md:w-1/3 md:pl-4 mt-8 md:mt-0">
-      {/* Ici, placez l'outil calculatrice */}
-      <button onClick={() => setShowCalculator(true)} className="p-2 hover:opacity-80">
-        <img src="/calculatrice.png" alt="Calculatrice" className="w-15 h-15" />
-      </button>
-    </div>
-  </div>
-</main>
+      {/* Contenu principal */}
+      <main className="flex-grow pt-24 container mx-auto px-4">
+        <div className="bg-white/90 p-6 rounded-2xl shadow-xl backdrop-blur-md">
+          <div className="flex justify-center">
+            <motion.h1
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              whileHover={{ scale: 1.05, rotate: -1 }}
+              className={`${rowdies.className} text-5xl mb-6 inline-flex items-center gap-4 text-blue-100 group cursor-pointer`}
+              style={{ opacity: 1, transform: "none", WebkitTextStroke: "1px grey", textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
+            >
+              Exercices de Mathématiques
+            </motion.h1>
+          </div>
 
+          <div className="flex flex-col md:flex-row">
+            {/* Colonne de gauche */}
+            <div className="md:w-2/3">
+              {/* Sélection du domaine */}
+              <div className="mb-4">
+                <label className="font-['Arial'] block font-bold mb-2 text-gray-700">Sélectionnez un domaine :</label>
+                <select
+                  className="font-['Arial'] p-2 border border-gray-300 rounded bg-white shadow-sm focus:ring-blue-500 w-full"
+                  value={selectedDomain}
+                  onChange={(e) => {
+                    setSelectedDomain(e.target.value);
+                    setSelectedChapter("");
+                    setGeneratedExercise(null);
+                    setUserAnswer("");
+                    setIsAnswerSubmitted(false);
+                    setFeedback(null);
+                  }}
+                >
+                  <option value="">-- Choisissez un domaine --</option>
+                  {domains.map((domain: Domain) => (
+                    <option key={domain.name} value={domain.name}>
+                      {domain.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Sélection du chapitre */}
+              {selectedDomain && (
+                <div className="mb-4">
+                  <label className="font-['Arial'] block font-bold mb-2 text-gray-700">Sélectionnez un chapitre :</label>
+                  <select
+                    className="font-['Arial'] p-2 border border-gray-300 rounded bg-white shadow-sm focus:ring-blue-500 w-full"
+                    value={selectedChapter}
+                    onChange={(e) => {
+                      setSelectedChapter(e.target.value);
+                      setGeneratedExercise(null);
+                      setUserAnswer("");
+                      setIsAnswerSubmitted(false);
+                      setFeedback(null);
+                    }}
+                  >
+                    <option value="">-- Choisissez un chapitre --</option>
+                    {chapters.map((chap, index) => (
+                      <option key={index} value={chap.titre}>
+                        {chap.titre}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
+
+              {/* Bouton pour générer l'exercice */}
+              <button
+                onClick={handleGenerateExercise}
+                className="font-['Arial'] w-full bg-blue-400 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition"
+                disabled={isLoading}
+              >
+                {isLoading ? "Génération en cours..." : "Générer l'exercice"}
+              </button>
+
+              {/* Affichage de l'exercice généré */}
+              {generatedExercise && (
+                <div className="font-['Arial'] mt-6 p-6 border border-gray-300 rounded-lg bg-gray-50 shadow-sm">
+                  <h2 className="text-2xl font-bold mb-4 text-gray-800 border-b pb-2">Exercice généré</h2>
+                  
+                  {/* En-tête de l'exercice */}
+                  <div className="mb-4 text-sm text-gray-600 flex items-center gap-2">
+                    <span className="font-semibold">{userClass}ème</span>
+                    <span>•</span>
+                    <span>{selectedDomain}</span>
+                    <span>•</span>
+                    <span>{selectedChapter}</span>
+                  </div>
+
+                  {/* Contenu de l'exercice */}
+                  <div className="font-['Arial'] text-gray-800 space-y-4 leading-relaxed">
+                    {generatedExercise.split('###').map((section, index) => {
+                      if (section.trim() === '') return null;
+                      const [title, ...content] = section.split('\n');
+                      return (
+                        <div key={index} className="mb-6">
+                          {title.includes('Mission') ? (
+                            <h3 className="text-lg font-bold text-blue-800 mb-2">{title}</h3>
+                          ) : title.includes('Consignes') ? (
+                            <h3 className="text-lg font-bold text-green-800 mb-2">{title}</h3>
+                          ) : (
+                            <h3 className="text-lg font-bold text-gray-800 mb-2">{title}</h3>
+                          )}
+                          <div className="pl-4 border-l-4 border-gray-200">
+                            {content.map((line, i) => (
+                              <p key={i} className="mb-2">
+                                {line.trim()}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Affichage du GeometryBoard si nécessaire */}
+                  {(generatedExercise.toLowerCase().includes("geometryboard") ||
+                    (generatedExercise.toLowerCase().includes("affichage interactif") &&
+                    !generatedExercise.toLowerCase().includes("aucun affichage interactif"))) && (
+                    <div className="mt-6 p-4 border border-gray-200 rounded-lg bg-white">
+                      <GeometryBoard />
+                    </div>
+                  )}
+
+                  {/* Zone de réponse */}
+                  <div className="mt-6 pt-6 border-t border-gray-200">
+                    <label className="font-['Arial'] block font-bold mb-2 text-gray-700">Votre réponse :</label>
+                    <textarea
+                      className="font-['Arial'] w-full p-4 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 h-40 transition-all"
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      disabled={isAnswerSubmitted}
+                      placeholder="Écrivez votre réponse ici..."
+                    />
+                    <button
+                      onClick={handleSubmitAnswer}
+                      className="font-['Arial'] mt-4 bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={isAnswerSubmitted || checkingAnswer}
+                    >
+                      {checkingAnswer ? "Vérification en cours..." : "Soumettre"}
+                    </button>
+                  </div>
+
+                  {/* Feedback */}
+                  {feedback && (
+                    <div className="mt-6 p-4 border border-gray-300 rounded-lg bg-white shadow-sm">
+                      <h3 className="text-lg font-bold text-gray-800 mb-2">Feedback</h3>
+                      <div className="prose prose-sm max-w-none">
+                        <ReactMarkdown>{feedback}</ReactMarkdown>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Colonne de droite */}
+            <div className="md:w-1/3 md:pl-4 mt-8 md:mt-0">
+            </div>
+          </div>
+        </div>
+      </main>
 
       {/* Footer */}
       <footer className="p-4 text-center bg-gray-100">
         © 2025 My Personal Teacher. Tous droits réservés.
       </footer>
 
-      {/* Affichage de la calculatrice scientifique */}
+      {/* Calculatrice */}
       {showCalculator && <CalculatorModal onClose={() => setShowCalculator(false)} />}
     </div>
   );

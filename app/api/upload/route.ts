@@ -5,14 +5,58 @@ import { v4 as uuidv4 } from "uuid";
 
 // Initialisation de Firebase Admin (à faire une seule fois)
 if (!getApps().length) {
-  initializeApp({
-    credential: cert(JSON.parse(process.env.FIREBASE_ADMIN_CREDENTIALS!)),
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-  });
+  try {
+    const credentials = process.env.FIREBASE_ADMIN_CREDENTIALS;
+    const storageBucket = process.env.FIREBASE_STORAGE_BUCKET;
+
+    if (!credentials || !storageBucket) {
+      console.warn("Firebase credentials or storage bucket not available");
+      if (process.env.NODE_ENV === "development") {
+        console.log("Skipping Firebase initialization in development mode");
+      } else {
+        console.error("Firebase configuration is required in production");
+      }
+    } else {
+      try {
+        const parsedCredentials = JSON.parse(credentials);
+        initializeApp({
+          credential: cert(parsedCredentials),
+          storageBucket: storageBucket,
+        });
+        console.log("Firebase Admin initialized successfully");
+      } catch (parseError) {
+        console.error("Error parsing Firebase credentials:", parseError);
+        if (process.env.NODE_ENV === "production") {
+          throw new Error("Invalid Firebase credentials format");
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error initializing Firebase Admin:", error);
+    if (process.env.NODE_ENV === "production") {
+      throw error;
+    } else {
+      console.log("Continuing without Firebase Admin in development mode");
+    }
+  }
 }
 
 export async function POST(request: Request) {
   try {
+    // Vérifier si Firebase Admin est initialisé
+    if (!getApps().length) {
+      if (process.env.NODE_ENV === "development") {
+        // En développement, simuler une réponse réussie
+        return NextResponse.json({ 
+          url: `https://example.com/mock-upload/${Date.now()}`
+        });
+      }
+      return NextResponse.json(
+        { error: "Firebase Admin not initialized" },
+        { status: 500 }
+      );
+    }
+
     // Extraction du fichier depuis le FormData de la requête
     const formData = await request.formData();
     const file = formData.get("file") as File;
@@ -39,7 +83,7 @@ export async function POST(request: Request) {
       metadata: { contentType: file.type },
     });
 
-    // Générer l'URL publique (assurez-vous que votre bucket autorise l'accès public ou utilisez un URL signé)
+    // Générer l'URL publique
     const fileUrl = `https://storage.googleapis.com/${process.env.FIREBASE_STORAGE_BUCKET}/${fileName}`;
 
     return NextResponse.json({ url: fileUrl });

@@ -8,7 +8,7 @@ import { useUser } from "../../../../context/UserContext";
 import { storeOrIncrementScore } from "../../../../lib/storeOrIncrementScore";
 import { db, auth } from "../../../../lib/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Inter } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -235,8 +235,26 @@ export default function IrregularVerbsGame() {
     if (allCorrect) {
       msg = "Bravo! Vos réponses sont correctes! 😄";
       setScore((prev) => prev + 1);
+      
+      // Mise à jour des points dans Firestore
       if (user?.uid) {
-        await storeOrIncrementScore(db, user.uid, "verbs", 1); // pas de feedback
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const currentPoints = userData.notes?.anglais?.jeux?.irregular_verbs || 0;
+          const pointsToAdd = 1; // 1 point par verbe correct
+          
+          // Mise à jour des points dans le sous-champ irregular_verbs
+          await updateDoc(userRef, {
+            'notes.anglais.jeux.irregular_verbs': currentPoints + pointsToAdd,
+            totalPoints: (userData.totalPoints || 0) + pointsToAdd
+          });
+          
+          // Ajout d'un message de félicitations
+          msg += `\n\n🎉 Bravo ! Vous avez gagné ${pointsToAdd} point ! Total en verbes irréguliers : ${currentPoints + pointsToAdd} points`;
+        }
       }
     } else {
       msg = "Oups! " + msg + "Essayez encore!";
