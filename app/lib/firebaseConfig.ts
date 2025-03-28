@@ -4,13 +4,13 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDzEuW_3YK4QCsl9dGvLdO2kVvlBnfZbaM",
-  authDomain: "my-personal-teacher-f633d.firebaseapp.com",
-  projectId: "my-personal-teacher-f633d",
-  storageBucket: "my-personal-teacher-f633d.firebasestorage.app",
-  messagingSenderId: "866512407278",
-  appId: "1:866512407278:web:b6c50e943a37bfb5bbc1ff",
-  measurementId: "G-5S4LWNZEC0"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialisation de l'application Firebase

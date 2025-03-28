@@ -4,25 +4,26 @@ import * as JXG from "jsxgraph";
 // Ajout du type pour les éléments JSXGraph
 interface JXGElement extends JXG.GeometryElement {
   elType: string;
-  X?: () => number;
-  Y?: () => number;
+  X?: ((t?: number, suspendUpdate?: boolean) => number) | (() => number);
+  Y?: ((t?: number, suspendUpdate?: boolean) => number) | (() => number);
   id?: string;
   parents?: string[];
+  Value?: ((t?: number) => number) | (() => number);
 }
 
 export default function GeometryBoard() {
   const boardRef = useRef<JXG.Board | null>(null);
   const [board, setBoard] = useState<JXG.Board | null>(null);
-  const [points, setPoints] = useState<JXG.GeometryElement[]>([]);
-  const [segments, setSegments] = useState<JXG.GeometryElement[]>([]);
-  const [angles, setAngles] = useState<JXG.GeometryElement[]>([]);
-  const [measurements, setMeasurements] = useState<JXG.GeometryElement[]>([]);
-  const [protractor, setProtractor] = useState<JXG.GeometryElement | null>(null);
+  const [points, setPoints] = useState<JXGElement[]>([]);
+  const [segments, setSegments] = useState<JXGElement[]>([]);
+  const [angles, setAngles] = useState<JXGElement[]>([]);
+  const [measurements, setMeasurements] = useState<JXGElement[]>([]);
+  const [protractor, setProtractor] = useState<JXGElement | null>(null);
   const [geometryFeedback, setGeometryFeedback] = useState<string>("");
   const [currentTool, setCurrentTool] = useState<string>("move");
   const [showProtractor, setShowProtractor] = useState<boolean>(false);
   const [instructions, setInstructions] = useState<string>("");
-  const [selectedPoints, setSelectedPoints] = useState<JXG.GeometryElement[]>([]);
+  const [selectedPoints, setSelectedPoints] = useState<JXGElement[]>([]);
   const [isCreatingShape, setIsCreatingShape] = useState<boolean>(false);
 
   // Initialisation du plan avec une échelle en cm
@@ -35,7 +36,7 @@ export default function GeometryBoard() {
       showCopyright: false,
       unitX: 50, // 50 pixels = 1 cm
       unitY: 50  // 50 pixels = 1 cm
-    });
+    } as JXG.BoardAttributes);
     boardRef.current = b;
     setBoard(b);
 
@@ -99,7 +100,7 @@ export default function GeometryBoard() {
   };
 
   // Fonction pour créer un segment avec une longueur spécifique
-  const createSegmentWithLength = (point1: JXG.GeometryElement, length: number) => {
+  const createSegmentWithLength = (point1: JXGElement, length: number) => {
     if (!board) return null;
 
     // Créer un cercle invisible avec le rayon souhaité
@@ -135,7 +136,7 @@ export default function GeometryBoard() {
   };
 
   // Fonction pour créer un carré
-  const createSquare = (startPoint: JXG.GeometryElement, sideLength: number) => {
+  const createSquare = (startPoint: JXGElement, sideLength: number) => {
     if (!board) return;
 
     const p1 = startPoint;
@@ -173,7 +174,7 @@ export default function GeometryBoard() {
   };
 
   // Fonction pour créer un triangle isocèle
-  const createIsoscelesTriangle = (basePoint: JXG.GeometryElement, angle: number, sideLength: number) => {
+  const createIsoscelesTriangle = (basePoint: JXGElement, angle: number, sideLength: number) => {
     if (!board) return;
 
     const p1 = basePoint;
@@ -219,7 +220,7 @@ export default function GeometryBoard() {
   };
 
   // Fonction pour créer un angle
-  const createAngle = (p1: JXG.GeometryElement, p2: JXG.GeometryElement, p3: JXG.GeometryElement) => {
+  const createAngle = (p1: JXGElement, p2: JXGElement, p3: JXGElement) => {
     if (!board) return null;
 
     // Créer les segments avec des coordonnées dynamiques
@@ -227,13 +228,13 @@ export default function GeometryBoard() {
       strokeColor: 'orange',
       strokeWidth: 2,
       highlight: false
-    });
+    }) as JXGElement;
 
     const segment2 = board.create('segment', [p2, p3], {
       strokeColor: 'orange',
       strokeWidth: 2,
       highlight: false
-    });
+    }) as JXGElement;
 
     // Créer l'angle avec une étiquette dynamique
     const angle = board.create('angle', [p1, p2, p3], {
@@ -245,34 +246,31 @@ export default function GeometryBoard() {
         fontSize: 16,
         strokeColor: 'black',
         cssStyle: 'font-weight: bold',
-        // Mise à jour dynamique de l'étiquette avec la valeur de l'angle
         display: 'internal',
         anchorX: 'middle',
         anchorY: 'middle',
         offset: [0, 0],
         parse: false,
-        useMathJax: false,
-        // Formater l'angle en degrés avec un décimal
-        cssClass: 'angle-label'
+        useMathJax: false
       },
       type: 'sector',
       orthoType: 'square',
       orthoSensitivity: 2
-    });
+    }) as unknown as JXGElement;
 
     // Ajouter un texte pour afficher la mesure de l'angle
     const angleText = board.create('text', [
-      () => p2.X() + 2,
-      () => p2.Y(),
+      () => p2.X?.() ?? 0 + 2,
+      () => p2.Y?.() ?? 0,
       () => {
-        const angleValue = angle.Value() * (180 / Math.PI);
+        const angleValue = (angle.Value?.() ?? 0) * (180 / Math.PI);
         return angleValue.toFixed(1) + '°';
       }
     ], {
       fontSize: 16,
       fixed: true,
       highlight: false
-    });
+    }) as JXGElement;
 
     setSegments(prev => [...prev, segment1, segment2]);
     setAngles(prev => [...prev, angle]);
@@ -312,7 +310,7 @@ export default function GeometryBoard() {
           size: 3,
           color: "blue",
           fixed: false,
-        });
+        }) as JXGElement;
 
         setPoints(prev => [...prev, newPoint]);
         setSelectedPoints([]);
@@ -324,7 +322,7 @@ export default function GeometryBoard() {
           size: 3,
           color: "blue",
           fixed: false,
-        });
+        }) as JXGElement;
 
         setPoints(prev => [...prev, newPoint]);
         
@@ -362,7 +360,7 @@ export default function GeometryBoard() {
             size: 3,
             color: "blue",
             fixed: false,
-          });
+          }) as JXGElement;
 
           setPoints(prev => [...prev, newPoint]);
           setSelectedPoints([newPoint]);
@@ -385,7 +383,7 @@ export default function GeometryBoard() {
             size: 3,
             color: "blue",
             fixed: false,
-          });
+          }) as JXGElement;
 
           setPoints(prev => [...prev, newPoint]);
           setSelectedPoints([newPoint]);
@@ -407,7 +405,7 @@ export default function GeometryBoard() {
           size: 3,
           color: "orange",
           fixed: false,
-        });
+        }) as JXGElement;
 
         setPoints(prev => [...prev, newPoint]);
 
@@ -464,7 +462,7 @@ export default function GeometryBoard() {
         dash: 2,
         fillColor: 'none',
         highlightStrokeColor: 'gray'
-      });
+      }) as unknown as JXGElement;
 
       // Ajouter les graduations tous les 10 degrés
       for (let angle = 0; angle <= 180; angle += 10) {
@@ -523,7 +521,7 @@ export default function GeometryBoard() {
         orthotype: "sectordot",
         orthosensitivity: 0.5,
       });
-      setAngles((prev) => [...prev, angle] as JXG.GeometryElement[]);
+      setAngles((prev) => [...prev, angle] as JXGElement[]);
       setInstructions("Angle mesuré ! Vous pouvez voir sa valeur");
     } else {
       setInstructions("Placez d'abord trois points pour mesurer un angle");
