@@ -1,0 +1,100 @@
+{
+    "programme": {
+    "Langues vivantes étrangères - Anglais (4ème)": {
+    "themes_culturels": {
+    "chapitres": [
+    {
+    "titre": "La personne et les relations : s'affirmer et interagir",
+    "sous_chapitres": [
+    "Exprimer son opinion, ses préférences et ses sentiments de manière plus nuancée",
+    "Parler de ses projets et de ses ambitions",
+    "Les relations amicales et amoureuses (premières expériences)",
+    "Les conflits et les solutions",
+    "L'importance de l'engagement et de la solidarité"
+    ]
+    },
+    {
+    "titre": "Repères géographiques et culturels : diversité et ouverture",
+    "sous_chapitres": [
+    "Étude de sociétés anglophones contemporaines (modes de vie, valeurs)",
+    "Les enjeux sociaux et environnementaux dans le monde anglophone",
+    "L'influence de la culture anglophone (musique, cinéma, littérature...)",
+    "Les migrations et le multiculturalisme",
+    "Découverte d'organisations internationales"
+    ]
+    },
+    {
+    "titre": "L'imaginaire : exploration des genres et des émotions",
+    "sous_chapitres": [
+    "Analyse d'œuvres littéraires et cinématographiques plus complexes (extraits, courts-métrages)",
+    "Les codes des différents genres (science-fiction, policier, fantastique...)",
+    "L'expression des émotions à travers l'art",
+    "Création de productions imaginaires (scénarios, poèmes...)"
+    ]
+    },
+    {
+    "titre": "Le monde animal et végétal : responsabilités et actions",
+    "sous_chapitres": [
+    "Les menaces qui pèsent sur la faune et la flore (disparition des espèces, déforestation...)",
+    "Les actions individuelles et collectives pour la protection de l'environnement",
+    "Le développement durable et les énergies renouvelables",
+    "L'éthique animale"
+    ]
+    }
+    ]
+    },
+    "contenus_linguistiques": {
+    "chapitres": [
+    {
+    "titre": "Lexique",
+    "sous_chapitres": [
+    "Lexique abstrait (concepts, idées)",
+    "Vocabulaire lié aux médias et aux technologies",
+    "Le lexique de l'argumentation (accorder, réfuter...)",
+    "Les expressions idiomatiques courantes",
+    "Les préfixes et suffixes fréquents"
+    ]
+    },
+    {
+    "titre": "Grammaire",
+    "sous_chapitres": [
+    "Le prétérit continu (was/were + -ing)",
+    "Le present perfect (have/has + participe passé) : utilisation et contraste avec le prétérit simple",
+    "Les pronoms relatifs (who, which, that)",
+    "Les adjectifs et adverbes comparatifs et superlatifs (formes longues et irrégulières)",
+    "Les modaux exprimant la probabilité (may, might, could)",
+    "Les marqueurs de temps (since, for, ago, yet, already)",
+    "Les propositions subordonnées de temps (when, while, as soon as...)",
+    "L'expression du but (to + infinitif, so that)",
+    "Le discours rapporté (formes de base)"
+    ]
+    },
+    {
+    "titre": "Phonologie",
+    "sous_chapitres": [
+    "Perfectionnement de la prononciation et de l'intonation",
+    "La réduction des voyelles inaccentuées",
+    "Les liaisons et l'enchaînement",
+    "Discrimination auditive de sons proches"
+    ]
+    }
+    ]
+    },
+    "attendus_de_fin_d'année": {
+    "comprehension_orale": "Être capable de comprendre le sens général et les informations essentielles de messages oraux plus complexes sur des sujets variés (actualités, interviews courtes...).",
+    "comprehension_ecrite": "Être capable de comprendre des textes informatifs et narratifs plus longs et plus complexes, et d'identifier des points de vue et des intentions.",
+    "expression_orale_en_continu": "Être capable de s'exprimer de façon claire et relativement détaillée sur une gamme étendue de sujets relatifs à ses centres d'intérêt.",
+    "expression_ecrite": "Être capable d'écrire des textes clairs et détaillés sur des sujets variés, et d'exprimer son opinion.",
+    "interaction_orale": "Être capable de participer à une conversation sur des sujets familiers et moins familiers, de donner et de solliciter des explications."
+    },
+    "modalites_pedagogiques": [
+    "Analyse de documents authentiques plus élaborés (articles de presse, extraits littéraires, vidéos...)",
+    "Débats et discussions argumentées",
+    "Réalisation de projets collaboratifs plus ambitieux",
+    "Développement de stratégies de lecture et d'écoute plus fines",
+    "Entraînement à la prise de parole en public",
+    "Évaluation des compétences dans des contextes plus complexes"
+    ]
+    }
+    }
+    }

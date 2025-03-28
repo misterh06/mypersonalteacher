@@ -1,0 +1,110 @@
+{
+  "domains": [
+    {
+      "name": "Nombres et calculs",
+      "chapitres": [
+        {
+          "titre": "Les nombres entiers et les nombres décimaux",
+          "sous_chapitres": [
+            "Lire, écrire et représenter les nombres entiers naturels",
+            "Lire, écrire et représenter les nombres décimaux",
+            "Comparer et ordonner les nombres entiers et décimaux",
+            "Repérer et placer des nombres entiers et décimaux sur une droite graduée"
+          ]
+        },
+        {
+          "titre": "Les opérations de calcul",
+          "sous_chapitres": [
+            "Addition et soustraction de nombres entiers et décimaux",
+            "Multiplication de nombres entiers et décimaux",
+            "Division euclidienne de deux nombres entiers",
+            "Division décimale de deux nombres",
+            "Utilisation des parenthèses et respect des priorités opératoires"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Organisation et gestion de données, fonctions",
+      "chapitres": [
+        {
+          "titre": "Proportionnalité",
+          "sous_chapitres": [
+            "Identifier une situation de proportionnalité",
+            "Compléter un tableau de proportionnalité",
+            "Représenter graphiquement une situation de proportionnalité",
+            "Utiliser le coefficient de proportionnalité",
+            "Résoudre des problèmes relevant de la proportionnalité"
+          ]
+        },
+        {
+          "titre": "Organisation et représentation de données",
+          "sous_chapitres": [
+            "Lire et interpréter des tableaux de données",
+            "Construire et interpréter des diagrammes",
+            "Calculer et interpréter la moyenne d'une série statistique"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Grandeurs et mesures",
+      "chapitres": [
+        {
+          "titre": "Longueurs, masses, durées",
+          "sous_chapitres": [
+            "Choisir l'unité de mesure appropriée",
+            "Effectuer des conversions d'unités",
+            "Mesurer et estimer des longueurs, des masses et des durées",
+            "Résoudre des problèmes impliquant des mesures"
+          ]
+        },
+        {
+          "titre": "Aires et volumes",
+          "sous_chapitres": [
+            "Calculer l'aire du carré et du rectangle",
+            "Notion de volume et unités de volume",
+            "Calculer le volume du pavé droit"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Espace et géométrie",
+      "chapitres": [
+        {
+          "titre": "Angles",
+          "sous_chapitres": [
+            "Identifier et nommer les différents types d'angles",
+            "Mesurer un angle avec un rapporteur",
+            "Tracer un angle de mesure donnée",
+            "Comprendre et utiliser la somme des mesures des angles d'un triangle"
+          ]
+        },
+        {
+          "titre": "Figures planes",
+          "sous_chapitres": [
+            "Connaître et utiliser les propriétés des droites parallèles et perpendiculaires",
+            "Identifier, décrire et construire les quadrilatères particuliers",
+            "Identifier, décrire et construire les triangles particuliers",
+            "Vocabulaire et notations de base"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Algorithmique et programmation",
+      "chapitres": [
+        {
+          "titre": "Initiation à l'algorithmique et à la programmation",
+          "sous_chapitres": [
+            "Comprendre la notion d'algorithme",
+            "Écrire, tester et modifier un algorithme simple",
+            "Traduire un algorithme simple en programme",
+            "Notions de variables, de boucles et d'instructions conditionnelles"
+          ]
+        }
+      ]
+    }
+  ]
+}

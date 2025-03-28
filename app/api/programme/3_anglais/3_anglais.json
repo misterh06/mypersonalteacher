@@ -1,0 +1,102 @@
+{
+    "programme": {
+    "Langues vivantes étrangères - Anglais (3ème)": {
+    "themes_culturels": {
+    "chapitres": [
+    {
+    "titre": "La personne et le monde professionnel : orientation et avenir",
+    "sous_chapitres": [
+    "Parler de ses aspirations professionnelles et de ses études futures",
+    "Le monde du travail (différents métiers, compétences requises)",
+    "L'importance des stages et de l'expérience professionnelle",
+    "Les enjeux de l'orientation scolaire et professionnelle",
+    "L'égalité des chances et la diversité dans le monde du travail"
+    ]
+    },
+    {
+    "titre": "Repères géographiques et culturels : enjeux contemporains",
+    "sous_chapitres": [
+    "Analyse de problématiques mondiales (environnement, économie, politique) dans le monde anglophone",
+    "Les mouvements migratoires et leurs conséquences culturelles",
+    "Le rôle des médias et de l'information",
+    "Les formes d'engagement citoyen et politique",
+    "Les relations internationales et les organisations mondiales"
+    ]
+    },
+    {
+    "titre": "L'imaginaire : engagement et réflexion",
+    "sous_chapitres": [
+    "Étude d'œuvres littéraires, théâtrales et cinématographiques abordant des thèmes sociaux et éthiques",
+    "L'analyse des personnages et de leurs motivations",
+    "Les figures héroïques et les anti-héros",
+    "L'impact des œuvres sur la société",
+    "La création de productions artistiques engagées"
+    ]
+    },
+    {
+    "titre": "Sciences et technologies : progrès et défis",
+    "sous_chapitres": [
+    "Les grandes découvertes scientifiques et leurs conséquences",
+    "Les enjeux éthiques liés aux avancées technologiques (intelligence artificielle, biotechnologies...)",
+    "L'impact des technologies sur la vie quotidienne et la société",
+    "La communication et les réseaux sociaux",
+    "Les défis de la transition numérique"
+    ]
+    }
+    ]
+    },
+    "contenus_linguistiques": {
+    "chapitres": [
+    {
+    "titre": "Lexique",
+    "sous_chapitres": [
+    "Vocabulaire spécialisé lié aux thèmes étudiés",
+    "Le lexique de l'argumentation et de la persuasion",
+    "Les expressions de l'hypothèse et de la condition",
+    "Les synonymes et les antonymes pour nuancer son propos",
+    "Le vocabulaire des médias et de l'information"
+    ]
+    },
+    {
+    "titre": "Grammaire",
+    "sous_chapitres": [
+    "Le past perfect (had + participe passé)",
+    "Le futur simple (will) et le futur antérieur (will have + participe passé)",
+    "Les propositions subordonnées relatives complexes",
+    "Les propositions subordonnées circonstancielles (cause, conséquence, condition, opposition)",
+    "Le conditionnel présent et passé",
+    "La voix passive",
+    "Les verbes suivis de l'infinitif ou du gérondif",
+    "Les quantifieurs (much, many, few, little...)",
+    "Les connecteurs logiques complexes (however, moreover, although...)"
+    ]
+    },
+    {
+    "titre": "Phonologie",
+    "sous_chapitres": [
+    "Maîtrise de l'accentuation et de l'intonation dans des énoncés complexes",
+    "La prononciation des sons complexes et des diphtongues",
+    "La perception et la production des variations régionales de l'anglais (initiation)",
+    "L'influence de l'intonation sur le sens"
+    ]
+    }
+    ]
+    },
+    "attendus_de_fin_de_cycle": {
+    "comprehension_orale": "Être capable de comprendre des discours oraux complexes sur des sujets abstraits et concrets, y compris des discussions techniques dans son domaine de spécialisation.",
+    "comprehension_ecrite": "Être capable de lire avec un grand degré d'autonomie en adaptant le mode et la vitesse de lecture à différents types de textes longs et complexes.",
+    "expression_orale_en_continu": "Être capable de s'exprimer de façon claire et structurée, de développer son point de vue sur des sujets complexes et de choisir le vocabulaire approprié.",
+    "expression_ecrite": "Être capable d'écrire des textes clairs, bien structurés et détaillés sur des sujets complexes, en manifestant une maîtrise des outils d'organisation, d'articulation et de cohésion du discours.",
+    "interaction_orale": "Être capable de communiquer avec aisance et spontanéité, de participer activement à une discussion et de comprendre des expressions idiomatiques et familières."
+    },
+    "modalites_pedagogiques": [
+    "Analyse critique de documents authentiques variés et complexes",
+    "Débats argumentatifs et structurés",
+    "Réalisation de projets de recherche et de présentation",
+    "Développement de stratégies d'autonomie et d'apprentissage tout au long de la vie",
+    "Utilisation des technologies de l'information et de la communication pour la recherche et la production",
+    "Évaluation des compétences dans des situations de communication authentiques"
+    ]
+    }
+    }
+    }

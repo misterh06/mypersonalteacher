@@ -1,0 +1,104 @@
+📂 my_personal_teacher/
+├── 📁 app/
+│ ├── 📁 api/
+│ │ ├── 📁 chatbot/
+│ │ │ ├── 📜 route.ts
+│ │ ├── 📁 chatbot2_bis
+│ │ │ ├── 📜 route.ts
+│ │ ├── 📁 matieres/
+│ │ │ ├── 📁 anglais/
+│ │ │ │ ├── 📁 checkAnswer/
+│ │ │ │ │ └── 📜 route.ts
+│ │ │ │ ├── 📁 generateExercise/
+│ │ │ │ │ └── 📜 route.ts
+│ │ │ ├── 📁 maths/
+│ │ │ │ ├── 📁 checkAnswer/
+│ │ │ │ │ └── 📜 route.ts
+│ │ │ │ ├── 📁 generateExercise/
+│ │ │ │ │ └── 📜 route.ts
+│ │ ├── 📁 programme/
+│ │ │ ├── 📁 3_maths/
+│ │ │ │ ├── 📄 3_maths.json
+│ │ │ │ ├── 📜 route.ts
+│ │ │ ├── 📁 4_maths/
+│ │ │ │ ├── 📄 4_maths.json
+│ │ │ │ ├── 📜 route.ts
+│ │ │ ├── 📁 5_maths/
+│ │ │ │ ├── 📄 5_maths.json
+│ │ │ │ ├── 📜 route.ts
+│ │ │ ├── 📁 6_maths/
+│ │ │ │ ├── 📄 6_maths.json
+│ │ │ │ ├── 📜 route.ts
+│ │ │ ├── 📁 6_anglais/
+│ │ │ │ ├── 📄 6_anglais.json
+│ │ │ │ ├── 📜 route.ts
+│ │ │ ├── 📁 5_anglais/
+│ │ │ │ ├── 📄 5_anglais.json
+│ │ │ │ ├── 📜 route.ts
+│ │ │ ├── 📁 4_anglais/
+│ │ │ │ ├── 📄 4_anglais.json
+│ │ │ │ ├── 📜 route.ts
+│ │ │ ├── 📁 3_anglais/
+│ │ │ │ ├── 📄 3_anglais.json
+│ │ │ │ ├── 📜 route.ts
+│
+│ ├── 📁 context/
+│ │ │ └──📜 UserContext.tsx
+│
+│ ├── 📁 hooks/
+│ │ │ └──📜 useUserData.ts
+│
+│ ├── 📁 lib/
+│ │   └──📜 firebaseConfig.ts
+│ │   └──📜 storeOrincrementScore.ts│
+│ ├── 📁 login/
+│ │   └──📜 page.tsx
+│
+│ ├── 📁 matieres/
+│ │ ├──📁 anglais/
+│ │ │ ├── 📁 cours_anglais/
+│ │ │ │ │ └──📄 chatbox.tsx
+│ │ │ │ │ └──📄 page.tsx
+│ │ │ ├── 📁 exercices/
+│ │ │ │ │ └──💬 ConversationBot.tsx
+│ │ │ │ │ └──📄 page.tsx
+│ │ │ ├── 📁 jeux/
+│ │ │ │   └──📄 page.tsx
+│ │ │ |  ├── 📁 irregular-verbs/
+│ │ │ │  |  │ └──📄 page.tsx
+│ │ │ |  ├── 📁 order-words/
+│ │ │ │  |  │ └──📄 page.tsx
+│ │ │ |  ├── 📁 quiz/
+│ │ │ │  |  │ └──📄 page.tsx
+│ │ │ |  ├── 📁 translate/
+│ │ │ │  |  │ └──📄 page.tsx
+│ │ │ ├── 📁 revision/
+│ │ │ │  |  │ └──📄 page.tsx
+│ │ ├──📁 francais/
+│ │ │  └──📄 page.tsx
+│ │ ├──📁 maths/
+│ │ │ ├── 📁 cours/
+│ │ │ │ │ └──📐 algebre.tsx
+│ │ │ │ │ └──📐 Geometrie.tsx
+│ │ │ ├── 📁 devoirs/
+│ │ │ │ │ └──📐 mes_devoirs.tsx
+│ │ │ ├── 📁 exercices/
+│ │ │ │ │ └──📐 GeometryBoard.tsx
+│ │ │ │ │ └──📄 page.tsx
+│ │ │ │ │ └──📄 quizz.tsx
+│ │ │ ├──  📁 jeux/
+│ │ │ │ │ └──📄 page.tsx
+│── 📄 page.tsx
+├── 📁 profil/
+├── 📁 signup/
+│── 📄 favicon.ico
+│── 📄 globals.css
+│── 📄 tailwind.config.js
+│── 📄 layout.metadata.tsx
+│── 📄 layout.tsx
+│── 📄 page.tsx
+├── 📁 public/
+├── 📁 types/
+│── 📄 .env.local
+│── 📄 package.json
+│── 📄 postcss.config.js

@@ -1,0 +1,139 @@
+{
+    "programme": {
+    "Mathématiques (3ème)": {
+    "Nombres et calculs": {
+    "chapitres": [
+    {
+    "titre": "Racine carrée",
+    "sous_chapitres": [
+    "Définition et propriétés de la racine carrée",
+    "Calculs avec les racines carrées",
+    "Simplification d'expressions contenant des racines carrées"
+    ]
+    },
+    {
+    "titre": "Calcul littéral : identités remarquables et équations",
+    "sous_chapitres": [
+    "Identités remarquables : (a+b)², (a-b)², (a+b)(a-b)",
+    "Développement et factorisation à l'aide des identités remarquables",
+    "Équations du premier degré à une inconnue",
+    "Résolution de problèmes à l'aide d'équations du premier degré"
+    ]
+    },
+    {
+    "titre": "Fonctions linéaires et affines",
+    "sous_chapitres": [
+    "Fonction affine : définition et exemples",
+    "Représentation graphique d'une fonction affine (droite)",
+    "Détermination de l'expression d'une fonction affine à partir de sa représentation graphique ou de données",
+    "Coefficient directeur et ordonnée à l'origine"
+    ]
+    }
+    ]
+    },
+    "Organisation et gestion de données, fonctions": {
+    "chapitres": [
+    {
+    "titre": "Statistiques : indicateurs et dispersion",
+    "sous_chapitres": [
+    "Calcul de la moyenne, de la médiane et de l'étendue (révision)",
+    "Introduction des quartiles",
+    "Diagramme en boîte"
+    ]
+    },
+    {
+    "titre": "Probabilités : approfondissement",
+    "sous_chapitres": [
+    "Expériences aléatoires à une ou plusieurs étapes",
+    "Arbres de probabilités",
+    "Calcul de probabilités d'événements"
+    ]
+    },
+    {
+    "titre": "Systèmes d'équations linéaires à deux inconnues",
+    "sous_chapitres": [
+    "Notion de système d'équations",
+    "Résolution par substitution et par combinaison linéaire",
+    "Résolution de problèmes à l'aide de systèmes d'équations"
+    ]
+    }
+    ]
+    },
+    "Grandeurs et mesures": {
+    "chapitres": [
+    {
+    "titre": "Théorème de Thalès : approfondissement et réciproque",
+    "sous_chapitres": [
+    "Utilisation du théorème de Thalès dans différentes configurations",
+    "Réciproque du théorème de Thalès et sa démonstration"
+    ]
+    },
+    {
+    "titre": "Trigonométrie : sinus et tangente",
+    "sous_chapitres": [
+    "Sinus et tangente d'un angle aigu dans un triangle rectangle",
+    "Relations trigonométriques dans le triangle rectangle",
+    "Utilisation de la calculatrice pour déterminer des valeurs trigonométriques et des mesures d'angles",
+    "Résolution de problèmes impliquant la trigonométrie"
+    ]
+    },
+    {
+    "titre": "Agrandissement et réduction : aires et volumes",
+    "sous_chapitres": [
+    "Rapports des aires et des volumes lors d'un agrandissement ou d'une réduction"
+    ]
+    }
+    ]
+    },
+    "Espace et géométrie": {
+    "chapitres": [
+    {
+    "titre": "Configurations planes : triangles semblables",
+    "sous_chapitres": [
+    "Définition et propriétés des triangles semblables",
+    "Utilisation de la similitude pour calculer des longueurs"
+    ]
+    },
+    {
+    "titre": "Géométrie dans l'espace : sections de solides",
+    "sous_chapitres": [
+    "Sections planes de solides usuels (cube, pavé droit, cylindre, cône, sphère)"
+    ]
+    },
+    {
+    "titre": "Vecteurs (introduction)",
+    "sous_chapitres": [
+    "Notion de vecteur : direction, sens et longueur",
+    "Égalité de deux vecteurs",
+    "Translation et vecteurs"
+    ]
+    }
+    ]
+    },
+    "Algorithmique et programmation": {
+    "chapitres": [
+    {
+    "titre": "Algorithmes et fonctions",
+    "sous_chapitres": [
+    "Définition et utilisation de fonctions dans un algorithme",
+    "Modularisation d'un algorithme"
+    ]
+    },
+    {
+    "titre": "Programmation : utilisation de fonctions",
+    "sous_chapitres": [
+    "Définition et appel de fonctions avec et sans paramètres dans un langage de programmation",
+    "Utilisation de fonctions prédéfinies"
+    ]
+    },
+    {
+    "titre": "Résolution de problèmes mathématiques à l'aide de la programmation",
+    "sous_chapitres": [
+    "Écrire des programmes pour résoudre des équations simples, calculer des aires, etc."
+    ]
+    }
+    ]
+    }
+    }
+    }
+    }

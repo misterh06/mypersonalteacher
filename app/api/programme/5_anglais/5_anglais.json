@@ -1,0 +1,98 @@
+{
+  "programme": {
+  "Langues vivantes étrangères - Anglais (5ème)": {
+  "themes_culturels": {
+  "chapitres": [
+  {
+  "titre": "La personne et la vie quotidienne : évolution et changements",
+  "sous_chapitres": [
+  "Décrire son évolution personnelle (goûts, activités passées et présentes)",
+  "Parler des changements dans sa vie (déménagement, nouvelle école...)",
+  "Les relations avec les autres (nouveaux amis, groupes d'appartenance)",
+  "Les événements marquants de la vie (anniversaires, fêtes familiales)"
+  ]
+  },
+  {
+  "titre": "Repères géographiques et culturels : élargissement des horizons",
+  "sous_chapitres": [
+  "Explorer des régions et des villes du monde anglophone (caractéristiques, points d'intérêt)",
+  "Découvrir des aspects de la vie quotidienne dans d'autres pays anglophones (école, transports...)",
+  "Comparer des traditions et des coutumes (alimentation, célébrations)",
+  "Introduction à des figures historiques ou culturelles"
+  ]
+  },
+  {
+  "titre": "L'imaginaire : aventures et découvertes",
+  "sous_chapitres": [
+  "Lecture et analyse d'extraits de romans et de nouvelles pour la jeunesse",
+  "Découverte de différents genres littéraires (fantastique, aventure...)",
+  "Le vocabulaire de l'aventure et de l'exploration",
+  "Imaginer et raconter des histoires simples"
+  ]
+  },
+  {
+  "titre": "Le monde animal et végétal : interactions et environnement",
+  "sous_chapitres": [
+  "Les animaux dans leur environnement (habitats, comportements)",
+  "L'importance de la nature et de la biodiversité",
+  "Sensibilisation aux problèmes environnementaux (pollution, protection des espèces)",
+  "Le vocabulaire spécifique (faune, flore)"
+  ]
+  }
+  ]
+  },
+  "contenus_linguistiques": {
+  "chapitres": [
+  {
+  "titre": "Lexique",
+  "sous_chapitres": [
+  "Lexique relatif aux thèmes culturels étudiés",
+  "Extension du vocabulaire de la vie quotidienne et des loisirs",
+  "Le vocabulaire des émotions et des sentiments (nuances)",
+  "Les indicateurs de temps (hier, demain, la semaine prochaine...)",
+  "Les adverbes de fréquence (always, often, sometimes, never)"
+  ]
+  },
+  {
+  "titre": "Grammaire",
+  "sous_chapitres": [
+  "Le prétérit simple (verbes réguliers et irréguliers fréquents)",
+  "Le présent continu (be + -ing) : utilisation et contraste avec le présent simple",
+  "Les pronoms personnels compléments (me, you, him, her, it, us, them)",
+  "Les adjectifs démonstratifs (this, that, these, those)",
+  "Les adverbes de manière (lentement, rapidement...)",
+  "Les prépositions de mouvement (to, from, through...)",
+  "Les connecteurs logiques (then, so, because, when)",
+  "L'expression de la possession ('s)",
+  "Les comparatifs (adjectifs courts)",
+  "Le futur proche (going to)"
+  ]
+  },
+  {
+  "titre": "Phonologie",
+  "sous_chapitres": [
+  "Affinement de la prononciation des sons de l'anglais",
+  "L'accentuation des mots polysyllabiques",
+  "L'intonation dans des phrases plus complexes (énumérations, expressions de l'émotion)"
+  ]
+  }
+  ]
+  },
+  "attendus_de_fin_d'année": {
+  "comprehension_orale": "Être capable de comprendre des informations factuelles simples exprimées oralement sur des sujets familiers et d'intérêt personnel.",
+  "comprehension_ecrite": "Être capable de comprendre des textes courts et simples portant sur des sujets concrets et familiers, et de dégager des informations spécifiques.",
+  "expression_orale_en_continu": "Être capable de décrire des expériences et des événements, ses rêves, ses espoirs et ses ambitions. Être capable de donner des raisons et des explications simples.",
+  "expression_ecrite": "Être capable d'écrire des textes courts et simples sur des sujets familiers ou d'intérêt personnel. Être capable d'écrire des lettres personnelles simples.",
+  "interaction_orale": "Être capable de communiquer lors de tâches simples et habituelles ne demandant qu'un échange d'informations direct et portant sur des sujets et des activités familiers."
+  },
+  "modalites_pedagogiques": [
+  "Utilisation de documents authentiques simplifiés (articles, interviews courtes...)",
+  "Mise en place de projets simples et concrets",
+  "Développement de stratégies de compréhension (repérage de mots-clés, inférences)",
+  "Encouragement à la prise de parole en continu et en interaction",
+  "Utilisation d'outils numériques pour l'apprentissage et la communication",
+  "Évaluation des compétences à travers des tâches variées"
+  ]
+  }
+  }
+  }

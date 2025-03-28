@@ -1,0 +1,138 @@
+{
+    "programme": {
+    "Mathématiques (4ème)": {
+    "Nombres et calculs": {
+    "chapitres": [
+    {
+    "titre": "Nombres relatifs",
+    "sous_chapitres": [
+    "Introduction des nombres relatifs (positifs et négatifs)",
+    "Représentation sur une droite graduée",
+    "Comparaison et ordre",
+    "Addition et soustraction de nombres relatifs",
+    "Simplification d'écritures"
+    ]
+    },
+    {
+    "titre": "Nombres rationnels : opérations",
+    "sous_chapitres": [
+    "Multiplication et division de nombres rationnels (écriture fractionnaire)",
+    "Priorités opératoires avec les nombres rationnels",
+    "Puissances d'un nombre (exposant entier positif)",
+    "Notation scientifique (introduction)"
+    ]
+    },
+    {
+    "titre": "Calcul littéral",
+    "sous_chapitres": [
+    "Utilisation de lettres pour désigner des nombres",
+    "Réduction d'expressions littérales",
+    "Distributivité simple",
+    "Factorisation simple (mise en facteur commun)"
+    ]
+    }
+    ]
+    },
+    "Organisation et gestion de données, fonctions": {
+    "chapitres": [
+    {
+    "titre": "Proportionnalité : fonctions linéaires",
+    "sous_chapitres": [
+    "Fonction linéaire : définition et exemples",
+    "Représentation graphique d'une fonction linéaire (droite passant par l'origine)",
+    "Détermination de l'expression d'une fonction linéaire à partir de sa représentation graphique ou de données"
+    ]
+    },
+    {
+    "titre": "Statistiques : indicateurs",
+    "sous_chapitres": [
+    "Calcul de la médiane",
+    "Calcul de l'étendue",
+    "Interprétation et comparaison de séries statistiques à l'aide d'indicateurs"
+    ]
+    },
+    {
+    "titre": "Probabilités (introduction)",
+    "sous_chapitres": [
+    "Notion d'expérience aléatoire et d'issue",
+    "Événements",
+    "Calcul de probabilités dans des cas simples (équiprobabilité)"
+    ]
+    }
+    ]
+    },
+    "Grandeurs et mesures": {
+    "chapitres": [
+    {
+    "titre": "Théorème de Thalès (introduction)",
+    "sous_chapitres": [
+    "Configuration de Thalès",
+    "Énoncé du théorème (dans le cas des triangles emboîtés)",
+    "Utilisation du théorème pour calculer des longueurs"
+    ]
+    },
+    {
+    "titre": "Trigonométrie (introduction)",
+    "sous_chapitres": [
+    "Cosinus d'un angle aigu dans un triangle rectangle",
+    "Utilisation du cosinus pour calculer des longueurs et des angles"
+    ]
+    }
+    ]
+    },
+    "Espace et géométrie": {
+    "chapitres": [
+    {
+    "titre": "Translations et rotations",
+    "sous_chapitres": [
+    "Définition et propriétés de la translation",
+    "Définition et propriétés de la rotation (centre, angle, sens)",
+    "Construction de l'image d'une figure par translation et rotation"
+    ]
+    },
+    {
+    "titre": "Triangles : théorème de Pythagore",
+    "sous_chapitres": [
+    "Énoncé du théorème de Pythagore",
+    "Utilisation du théorème pour calculer la longueur d'un côté d'un triangle rectangle",
+    "Réciproque du théorème de Pythagore"
+    ]
+    },
+    {
+    "titre": "Agrandissement et réduction",
+    "sous_chapitres": [
+    "Définition et propriétés",
+    "Calcul des longueurs, des aires et des volumes après agrandissement ou réduction"
+    ]
+    }
+    ]
+    },
+    "Algorithmique et programmation": {
+    "chapitres": [
+    {
+    "titre": "Variables et types de données",
+    "sous_chapitres": [
+    "Différents types de variables (nombres entiers, nombres décimaux, chaînes de caractères, booléens)",
+    "Opérations et affectations"
+    ]
+    },
+    {
+    "titre": "Structures de contrôle : alternatives et boucles",
+    "sous_chapitres": [
+    "Instructions conditionnelles (if...elif...else)",
+    "Boucles bornées (for)",
+    "Boucles non bornées (while)"
+    ]
+    },
+    {
+    "titre": "Fonctions (en programmation)",
+    "sous_chapitres": [
+    "Définition et appel d'une fonction simple",
+    "Paramètres d'une fonction"
+    ]
+    }
+    ]
+    }
+    }
+    }
+    }

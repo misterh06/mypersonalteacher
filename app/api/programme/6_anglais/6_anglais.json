@@ -1,0 +1,103 @@
+
+{
+  "programme": {
+    "Langues vivantes étrangères - Anglais (6ème)": {
+      "themes_culturels": {
+        "chapitres": [
+          {
+            "titre": "La personne et la vie quotidienne",
+            "sous_chapitres": [
+              "Se présenter et présenter quelqu'un (nom, âge, nationalité, lieu de résidence)",
+              "Décrire l'apparence physique et le caractère (adjectifs courants)",
+              "Parler de sa famille (membres, relations)",
+              "Décrire sa maison et son environnement proche",
+              "Les activités quotidiennes (se lever, prendre le petit-déjeuner, aller à l'école...)",
+              "Les loisirs et les centres d'intérêt (sports, musique, jeux...)"
+            ]
+          },
+          {
+            "titre": "Repères géographiques et culturels du monde anglophone",
+            "sous_chapitres": [
+              "Découverte des pays anglophones (Royaume-Uni, États-Unis, Canada, Australie...)",
+              "Les capitales et quelques villes importantes",
+              "Quelques monuments et symboles célèbres",
+              "Les fêtes et traditions principales (Noël, Halloween, anniversaires...)",
+              "La nourriture (quelques plats typiques)"
+            ]
+          },
+          {
+            "titre": "L'imaginaire et les histoires",
+            "sous_chapitres": [
+              "Découverte de personnages de contes et de fictions",
+              "Lecture et compréhension d'histoires simples et courtes",
+              "Éléments de base des récits (personnages, lieux, actions)"
+            ]
+          },
+          {
+            "titre": "Le monde animal",
+            "sous_chapitres": [
+              "Les animaux domestiques",
+              "Quelques animaux sauvages courants",
+              "Décrire des animaux (apparence, habitat, sons)"
+            ]
+          }
+        ]
+      },
+      "contenus_linguistiques": {
+        "chapitres": [
+          {
+            "titre": "Lexique",
+            "sous_chapitres": [
+              "Le vocabulaire relatif aux thèmes étudiés",
+              "Les nombres (jusqu'à cent)",
+              "Les couleurs",
+              "Les jours de la semaine et les mois de l'année",
+              "Le vocabulaire de la salle de classe et du matériel scolaire",
+              "Les salutations et les formules de politesse",
+              "Les mots interrogatifs de base (what, who, where, when, how)"
+            ]
+          },
+          {
+            "titre": "Grammaire",
+            "sous_chapitres": [
+              "Le présent simple (verbe 'to be', verbes réguliers et quelques verbes irréguliers fréquents)",
+              "Les pronoms personnels sujets",
+              "Les adjectifs possessifs",
+              "L'article défini 'the' et l'article indéfini 'a/an'",
+              "Le pluriel régulier des noms",
+              "Quelques prépositions de lieu (in, on, under, near)",
+              "La structure 'there is / there are'",
+              "La phrase affirmative, négative et interrogative (avec 'to be' et les verbes au présent simple)",
+              "L'impératif (formes simples)",
+              "Le verbe modal 'can' (capacité)"
+            ]
+          },
+          {
+            "titre": "Phonologie",
+            "sous_chapitres": [
+              "Identification et prononciation des sons de base de l'anglais (voyelles et consonnes)",
+              "L'accent tonique dans les mots",
+              "L'intonation dans les phrases déclaratives et interrogatives simples"
+            ]
+          }
+        ]
+      },
+      "attendus_de_fin_d'année": {
+        "comprehension_orale": "Être capable de comprendre des mots familiers et des expressions très courantes relatifs à soi, à sa famille et à son environnement immédiat quand les gens parlent lentement et distinctement.",
+        "comprehension_ecrite": "Être capable de comprendre des mots familiers et des phrases très simples, par exemple dans des panneaux, des affiches ou des catalogues.",
+        "expression_orale_en_continu": "Être capable de se présenter et de présenter quelqu'un d'autre. Être capable de poser des questions simples sur soi et sur les autres et de répondre à des questions de ce type.",
+        "expression_ecrite": "Être capable d'écrire des notes et des messages simples et courts relatifs aux besoins immédiats.",
+        "interaction_orale": "Être capable de participer à une conversation de manière simple si l'interlocuteur parle lentement et distinctement et se montre coopératif."
+      },
+      "modalites_pedagogiques": [
+        "Utilisation de supports visuels et concrets (images, objets, flashcards)",
+        "Répétition et mémorisation du vocabulaire de base",
+        "Activités orales courtes et ludiques (jeux, chansons, comptines)",
+        "Mise en place de routines de classe en anglais",
+        "Utilisation de consignes simples et claires",
+        "Valorisation des efforts et des progrès des élèves",
+        "Introduction progressive des éléments culturels"
+      ]
+    }
+  }
+}

@@ -1,0 +1,144 @@
+{
+    "programme": {
+    "Mathématiques (5ème)": {
+    "Nombres et calculs": {
+    "chapitres": [
+    {
+    "titre": "Nombres entiers et nombres décimaux : approfondissement",
+    "sous_chapitres": [
+    "Utilisation des grands nombres",
+    "Ordre de grandeur et estimation",
+    "Techniques de calcul mental et posé (révision et complexification)",
+    "Résolution de problèmes numériques complexes"
+    ]
+    },
+    {
+    "titre": "Fractions : opérations et nombres rationnels",
+    "sous_chapitres": [
+    "Addition et soustraction de fractions (même dénominateur et dénominateurs différents)",
+    "Multiplication d'une fraction par un nombre entier et par une autre fraction",
+    "Division d'une fraction par un nombre entier",
+    "Introduction de la notion de nombre rationnel",
+    "Comparer des nombres rationnels"
+    ]
+    },
+    {
+    "titre": "Nombres décimaux : division et proportionnalité",
+    "sous_chapitres": [
+    "Division d'un nombre décimal par un nombre entier",
+    "Division d'un nombre décimal par un nombre décimal",
+    "Quotient exact et quotient approché",
+    "Applications à la proportionnalité"
+    ]
+    }
+    ]
+    },
+    "Organisation et gestion de données, fonctions": {
+    "chapitres": [
+    {
+    "titre": "Proportionnalité : applications",
+    "sous_chapitres": [
+    "Pourcentages : calculs (appliquer un pourcentage, calculer un pourcentage)",
+    "Échelles : lecture et utilisation",
+    "Vitesses moyennes : calcul de distance, temps, vitesse",
+    "Représentation graphique de situations de proportionnalité et interprétation"
+    ]
+    },
+    {
+    "titre": "Organisation et représentation de données : statistiques",
+    "sous_chapitres": [
+    "Collecte, organisation et traitement de données",
+    "Calcul de fréquences",
+    "Diagrammes et graphiques adaptés aux données",
+    "Interprétation de données statistiques et calcul de moyenne pondérée"
+    ]
+    },
+    {
+    "titre": "Introduction aux fonctions",
+    "sous_chapitres": [
+    "Notion de variable",
+    "Expression littérale : simplification et évaluation",
+    "Introduction de la notion de fonction (lien entre deux variables)",
+    "Représentation graphique simple de fonctions"
+    ]
+    }
+    ]
+    },
+    "Grandeurs et mesures": {
+    "chapitres": [
+    {
+    "titre": "Aires : figures usuelles",
+    "sous_chapitres": [
+    "Aire du triangle",
+    "Aire du disque",
+    "Unités d'aire et conversions"
+    ]
+    },
+    {
+    "titre": "Volumes : solides usuels",
+    "sous_chapitres": [
+    "Volume du prisme droit et du cylindre de révolution",
+    "Unités de volume et conversions (lien avec la contenance)"
+    ]
+    },
+    {
+    "titre": "Angles : propriétés",
+    "sous_chapitres": [
+    "Angles adjacents, complémentaires, supplémentaires",
+    "Angles opposés par le sommet",
+    "Angles alternes-internes et correspondants (droites parallèles coupées par une sécante)",
+    "Utilisation des propriétés des angles pour résoudre des problèmes"
+    ]
+    }
+    ]
+    },
+    "Espace et géométrie": {
+    "chapitres": [
+    {
+    "titre": "Triangles : propriétés",
+    "sous_chapitres": [
+    "Inégalité triangulaire",
+    "Somme des angles d'un triangle",
+    "Hauteurs, médianes, bissectrices (définitions et propriétés simples)"
+    ]
+    },
+    {
+    "titre": "Parallélogrammes : propriétés",
+    "sous_chapitres": [
+    "Propriétés des côtés, des angles et des diagonales",
+    "Conditions pour qu'un quadrilatère soit un parallélogramme"
+    ]
+    },
+    {
+    "titre": "Symétrie centrale",
+    "sous_chapitres": [
+    "Définition et propriétés de la symétrie centrale",
+    "Construction de l'image d'un point, d'un segment, d'une droite et d'une figure par symétrie centrale",
+    "Centre de symétrie d'une figure"
+    ]
+    }
+    ]
+    },
+    "Algorithmique et programmation": {
+    "chapitres": [
+    {
+    "titre": "Algorithmique : variables et instructions",
+    "sous_chapitres": [
+    "Notion de variable informatique",
+    "Types d'instructions (affectation, lecture, écriture)",
+    "Enchaînement et séquences d'instructions"
+    ]
+    },
+    {
+    "titre": "Programmation : boucles et conditions",
+    "sous_chapitres": [
+    "Utilisation des boucles (répétition d'instructions)",
+    "Utilisation des instructions conditionnelles (si...alors...sinon)",
+    "Écriture et exécution de programmes simples résolvant des problèmes mathématiques"
+    ]
+    }
+    ]
+    }
+    }
+    }
+    }
